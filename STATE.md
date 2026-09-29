@@ -26,6 +26,13 @@ Branche `echo` = nos changements ; `main` suit l'upstream (karakeep-app/karakeep
   - Notes markdown : `==surligné==`, `=={green|red|blue|yellow}texte==`, blocs ```mermaid rendus en schémas.
   - Vue en direct : requêtes bookmarks/highlights/lists/tags rechargées toutes les 4 s (onglet visible).
 
+## Organisation de la base (données, pas dans git)
+- Listes : 🧭 Décisions · 📚 Sources · 🗂️ Projets · 📘 Guide.
+- Tags : `projet:<nom>`, `statut:ouverte|tranchée|abandonnée`, `sujet:<thème>` ; couleurs jaune=clé, vert=pour,
+  rouge=risque, bleu=à creuser.
+- Note « Mode d'emploi » (liste Guide) : conventions + modèle de fiche de décision.
+- Skill Claude `~/.claude/skills/karakeep/SKILL.md` : quand et comment utiliser Karakeep vs mémoire sémantique.
+
 ## Vérifié (30/09)
 - Surlignages par citation posés au caractère près (gras, apostrophes typographiques), visibles dans le lecteur.
 - Note avec bannière, surlignages colorés, schéma mermaid et image intégrée : rendu contrôlé dans Chrome.
