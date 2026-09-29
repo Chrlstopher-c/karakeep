@@ -1,7 +1,10 @@
 # TODO — fork Karakeep
 
 ## En cours
-- [ ] Démarrage automatique (services systemd user) au boot du portable.
+- [ ] Structurer la base (listes, conventions) + skill Claude d'usage Karakeep.
+
+## Fait
+- [x] Démarrage automatique (service systemd user `karakeep`).
 
 ## Backlog
 - [ ] Accès hors maison (tunnel) — décision de Chris.

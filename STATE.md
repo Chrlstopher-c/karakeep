@@ -8,6 +8,8 @@ Branche `echo` = nos changements ; `main` suit l'upstream (karakeep-app/karakeep
 ## Où ça tourne
 - Portable, sans Docker (Docker désactivé, sudo interactif) : `./start.sh` lance meilisearch (binaire dans
   `.runtime/`), Chrome headless (port 9222, crawler), web (`next start`, port `KARAKEEP_PORT`), workers (tsx).
+- Service systemd user `karakeep` (enabled, démarre à l'ouverture de session ; unité dans
+  `~/.config/systemd/user/karakeep.service`, appelle start.sh/stop.sh). Relance : `systemctl --user restart karakeep`.
 - Données : `.runtime/data` (SQLite + assets), `.runtime/meili`. Logs : `logs/` (remis à zéro au démarrage).
 - Config : `.env` (ignoré, symlinké dans apps/web, apps/workers, packages/db). Hôte/URL réels uniquement là.
 - Compte unique (admin) partagé Chris / Claude : ce que Claude fait via l'API apparaît chez Chris.
@@ -32,4 +34,3 @@ Branche `echo` = nos changements ; `main` suit l'upstream (karakeep-app/karakeep
 ## Limites connues
 - Joignable seulement sur le réseau local (bind 0.0.0.0) ; pas de tunnel.
 - Pas d'inférence IA intégrée (tags/résumés auto) : c'est Claude qui classe via le MCP.
-- Pas de service systemd : relancer `./start.sh` après un redémarrage du portable.
