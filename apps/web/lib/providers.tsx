@@ -18,6 +18,7 @@ import {
   TRPCProvider,
 } from "@karakeep/shared-react/trpc";
 
+import { LiveRefresh } from "./hooks/useLiveRefresh";
 import CustomI18nextProvider from "./i18n/provider";
 
 function makeQueryClient() {
@@ -85,6 +86,7 @@ export default function Providers({
         <SessionProvider session={session}>
           <QueryClientProvider client={queryClient}>
             <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
+              <LiveRefresh />
               <CustomI18nextProvider lang={userLocalSettings.lang}>
                 <ThemeProvider
                   attribute="class"

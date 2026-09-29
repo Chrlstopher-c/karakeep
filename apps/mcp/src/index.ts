@@ -6,6 +6,8 @@ import "./assets.ts";
 import "./bookmarks.ts";
 import "./highlights.ts";
 import "./lists.ts";
+import "./quotes.ts";
 import "./tags.ts";
+import "./uploads.ts";
 
 serveStdio(createMcpServer);

@@ -7,6 +7,9 @@ import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 
+import { MermaidDiagram } from "./mermaid-diagram";
+import remarkMark from "./remark-mark";
+
 function PreWithCopyBtn({ className, ...props }: React.ComponentProps<"pre">) {
   const ref = React.useRef<HTMLPreElement>(null);
   return (
@@ -66,7 +69,7 @@ export function MarkdownReadonly({
 
   return (
     <Markdown
-      remarkPlugins={[remarkGfm, remarkBreaks]}
+      remarkPlugins={[remarkGfm, remarkBreaks, remarkMark]}
       className={cn("prose dark:prose-invert", className)}
       components={{
         input: (props) =>
@@ -80,11 +83,20 @@ export function MarkdownReadonly({
           ) : (
             <input {...props} readOnly />
           ),
-        pre({ ...props }) {
+        pre({ node, ...props }) {
+          const code = node?.children[0];
+          const classes =
+            code?.type === "element" ? code.properties.className : undefined;
+          if (Array.isArray(classes) && classes.includes("language-mermaid")) {
+            return <>{props.children}</>;
+          }
           return <PreWithCopyBtn {...props} />;
         },
         code({ className, children, ...props }) {
           const match = /language-(\w+)/.exec(className ?? "");
+          if (match?.[1] === "mermaid") {
+            return <MermaidDiagram chart={String(children).trim()} />;
+          }
           return match ? (
             <SyntaxHighlighter
               PreTag="div"

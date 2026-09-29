@@ -11,8 +11,8 @@ import { createKarakeepClient } from "@karakeep/sdk";
 
 import packageJson from "../package.json";
 
-const addr = process.env.KARAKEEP_API_ADDR;
-const apiKey = process.env.KARAKEEP_API_KEY;
+export const addr = process.env.KARAKEEP_API_ADDR;
+export const apiKey = process.env.KARAKEEP_API_KEY;
 
 const getCustomHeaders = () => {
   try {

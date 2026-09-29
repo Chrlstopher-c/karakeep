@@ -243,6 +243,12 @@ registerTool(
         .optional()
         .describe(`Whether the bookmark is favourited.`),
       url: z.string().url().optional().describe(`New URL for a link bookmark.`),
+      text: z
+        .string()
+        .optional()
+        .describe(
+          `New markdown body for a text bookmark (note). Supports GFM, ==highlighted text==, mermaid code blocks and images via ![alt](/api/assets/<assetId>).`,
+        ),
       description: z
         .string()
         .nullable()

@@ -42,6 +42,7 @@
   "dependencies": {
     "@karakeep/sdk": "workspace:*",
     "@modelcontextprotocol/server": "^2.0.0",
+    "linkedom": "^0.18.13",
     "turndown": "^7.2.0",
     "zod": "^4.2.0"
   }
