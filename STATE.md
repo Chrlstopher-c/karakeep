@@ -33,6 +33,11 @@ Branche `echo` = nos changements ; `main` suit l'upstream (karakeep-app/karakeep
 - Note « Mode d'emploi » (liste Guide) : conventions + modèle de fiche de décision.
 - Skill Claude `~/.claude/skills/karakeep/SKILL.md` : quand et comment utiliser Karakeep vs mémoire sémantique.
 
+## CI
+- GitHub Actions activé sur le fork ; seul le workflow `CI` (lint, format, typecheck, tests + E2E, spec OpenAPI) est
+  actif, sur push `main`/`echo`. Les workflows de release (docker, mobile, extension, npm) sont désactivés.
+- Règle : CI verte à chaque étape clé poussée (`gh run watch --exit-status`).
+
 ## Vérifié (30/09)
 - Surlignages par citation posés au caractère près (gras, apostrophes typographiques), visibles dans le lecteur.
 - Note avec bannière, surlignages colorés, schéma mermaid et image intégrée : rendu contrôlé dans Chrome.
