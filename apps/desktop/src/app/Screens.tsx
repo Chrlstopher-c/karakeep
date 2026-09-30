@@ -5,10 +5,13 @@ import type { AgentActivity } from "../claude/useAgentActivity";
 import { ClaudeScreen } from "../claude/ClaudeScreen";
 import { DecisionsScreen } from "../decisions/DecisionsScreen";
 import { SheetScreen } from "../decisions/SheetScreen";
+import { HighlightsScreen } from "../highlights/HighlightsScreen";
 import { HomeScreen } from "../home/HomeScreen";
+import { ProjectsScreen } from "../projects/ProjectsScreen";
+import { SettingsScreen } from "../settings/SettingsScreen";
+import { TagsScreen } from "../tags/TagsScreen";
 import { ReaderScreen } from "../reader/ReaderScreen";
 import { SourcesScreen } from "../sources/SourcesScreen";
-import { Eyebrow } from "../shared/Eyebrow";
 import { EASE_OUT_SOFT } from "../shared/motion";
 import type { Route } from "./navigation";
 import { useNavigation } from "./navigation";
@@ -21,22 +24,18 @@ export interface ScreenActions {
   onToggleFollow: () => void;
 }
 
-// Écrans pas encore portés depuis la maquette.
-function Pending({ title }: { title: string }): ReactElement {
-  return (
-    <div className="mx-auto flex max-w-[1320px] flex-col gap-4 px-10 pt-9">
-      <Eyebrow>EN COURS DE PORTAGE</Eyebrow>
-      <h1 className="text-text m-0 text-[28px] font-extrabold tracking-[-0.035em]">
-        {title}
-      </h1>
-    </div>
-  );
-}
-
 function renderScreen(route: Route, actions: ScreenActions): ReactElement {
   switch (route.screen) {
     case "home":
       return <HomeScreen {...actions} />;
+    case "highlights":
+      return <HighlightsScreen />;
+    case "projects":
+      return <ProjectsScreen />;
+    case "tags":
+      return <TagsScreen />;
+    case "settings":
+      return <SettingsScreen />;
     case "claude":
       return (
         <ClaudeScreen
@@ -58,8 +57,6 @@ function renderScreen(route: Route, actions: ScreenActions): ReactElement {
       );
     case "sources":
       return <SourcesScreen onCapture={actions.onCapture} />;
-    default:
-      return <Pending title={route.screen} />;
   }
 }
 

@@ -29,7 +29,7 @@ export function useOverlays(
   const stopFollow = useCallback(() => {
     const done = follow.stop();
     if (done.length > 0) {
-      notify(`Claude a ${summarize(done)}.`, {
+      notify(`Pendant le suivi, Claude : ${summarize(done)}.`, {
         label: "Voir",
         run: () => go({ screen: "claude" }),
       });
