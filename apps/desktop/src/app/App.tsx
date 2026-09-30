@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { AnimatePresence, MotionConfig } from "motion/react";
 
 import { TRPCSettingsProvider } from "@karakeep/shared-react/providers/trpc-provider";
@@ -8,6 +8,7 @@ import { ConnectionContext } from "../connection/ConnectionContext";
 import { ConnectionScreen } from "../connection/ConnectionScreen";
 import type { Connection } from "../connection/connection-store";
 import { useConnection } from "../connection/useConnection";
+import { LaunchScreen } from "./LaunchScreen";
 import { NavigationProvider } from "./navigation";
 import { Shell } from "./Shell";
 import { ThemeContext, useTheme } from "./useTheme";
@@ -41,6 +42,8 @@ export function App(): ReactElement {
   const { state, connect, disconnect } = useConnection();
   const onDisconnect = useCallback(() => void disconnect(), [disconnect]);
   const theme = useTheme();
+  const [launching, setLaunching] = useState(true);
+  const endLaunch = useCallback(() => setLaunching(false), []);
   return (
     <ThemeContext.Provider value={theme}>
       <MotionConfig reducedMotion="user">
@@ -56,6 +59,7 @@ export function App(): ReactElement {
             />
           )}
         </AnimatePresence>
+        {launching && <LaunchScreen onDone={endLaunch} />}
       </MotionConfig>
     </ThemeContext.Provider>
   );

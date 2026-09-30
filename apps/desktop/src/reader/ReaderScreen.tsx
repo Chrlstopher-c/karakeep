@@ -7,6 +7,8 @@ import type { ZBookmark } from "@karakeep/shared/types/bookmarks";
 import type { ZHighlightColor } from "@karakeep/shared/types/highlights";
 
 import { useNavigation } from "../app/navigation";
+import { useServerHealth } from "../app/useServerHealth";
+import { useActiveConnection } from "../connection/ConnectionContext";
 import { useProvenance } from "../claude/useAgentActivity";
 import { markElements } from "./highlightDom";
 import { ReaderBody } from "./ReaderBody";
@@ -67,6 +69,7 @@ export function ReaderScreen({
     }),
   );
   const provenance = useProvenance();
+  const health = useServerHealth(useActiveConnection().address);
   const hl = useReaderHighlights(bookmarkId);
   const contentRef = useRef<HTMLDivElement>(null);
   const [mode, setMode] = useState<ReaderMode>("article");
@@ -153,7 +156,7 @@ export function ReaderScreen({
               target={selection.target}
               setTarget={selection.setTarget}
               applyTarget={apply}
-              readOnly={false}
+              readOnly={!health.online}
             />
           </article>
         </div>
