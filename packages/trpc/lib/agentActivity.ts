@@ -63,6 +63,8 @@ export async function recordAgentActivity(
 ): Promise<void> {
   const auth = ctx.auth;
   if (!ctx.user || auth?.type !== "apiKey" || !auth.agent) return;
+  // Managing keys is not work on the knowledge base.
+  if (path.startsWith("agentActivity.")) return;
   const input = asFields(rawInput);
   const output = asFields(rawOutput);
   try {

@@ -3,40 +3,206 @@
 @import "@fontsource-variable/jetbrains-mono";
 @import "../../design/tokens.css";
 
-/* Rôles sémantiques du thème night (défaut) ; le thème clair viendra avec la maquette. */
-@theme {
-  --color-bg: var(--color-night);
-  --color-surface: var(--color-night-2);
-  --color-surface-2: var(--color-night-3);
-  --color-border: var(--color-night-line);
-  --color-text: var(--color-night-text);
-  --color-text-soft: var(--color-night-soft);
-  --color-text-muted: var(--color-night-muted);
-  --color-accent: var(--color-brand-400);
-  --color-accent-text: var(--color-brand-light);
-}
-
+/* Rôles du thème, repris du prototype Claude Design (design/mockups/Savoir.dc.html).
+   Night par défaut ; data-theme="clair" sur <html> pour le clair. La barre latérale reste night. */
 :root {
   --font-manrope: "Manrope Variable";
   --font-jetbrains: "JetBrains Mono Variable";
+  --bg: #1e1830;
+  --surface: #251e38;
+  --surface-2: #2e2644;
+  --surface-3: #3a3150;
+  --surface-4: #4a3f63;
+  --line: #362d4d;
+  --line-strong: #4a3f63;
+  --text: #f3f1f6;
+  --soft: #c8c4d0;
+  --read: #c8c4d0;
+  --muted: #a39db5;
+  --subtle: #8e86a3;
+  --accent: #a774d4;
+  --accent-ink: #d5b8f0;
+  --tag-bg: #3a3150;
+  --tag-fg: #d5b8f0;
+  --claude-bg: #342b4a;
+  --active: #342b4a;
+  --ring: 0 0 0 1px #362d4d;
+  --lift: 0 0 0 1px #4a3f63, 0 28px 48px -26px rgba(8, 5, 18, 0.75);
+  --menu: 0 0 0 1px #4a3f63, 0 40px 80px -30px rgba(8, 5, 18, 0.8);
+  --modal: 0 0 0 1px #4a3f63, 0 60px 120px -30px rgba(0, 0, 0, 0.6);
+  --pop: #2e2644;
+  --field: #1e1830;
+  --btn-bg: #ffffff;
+  --btn-fg: #141414;
+  --btn-sh: 0 4px 0 #c9a6ea, 0 14px 30px -12px rgba(167, 116, 212, 0.6);
+  --btn-sh-a: 0 1px 0 #c9a6ea, 0 6px 16px -10px rgba(167, 116, 212, 0.5);
+  --scrim: rgba(18, 14, 30, 0.62);
+  --ok: #3fb785;
+  --warn: #e0a94a;
+  --err: #f08a7e;
+  --fresh: rgba(167, 116, 212, 0.18);
+  --ph-a: #2e2644;
+  --ph-line: #362d4d;
+  --hl-yellow: #ecc462;
+  --hl-yellow-bg: rgba(236, 196, 98, 0.28);
+  --hl-green: #70c496;
+  --hl-green-bg: rgba(112, 196, 150, 0.26);
+  --hl-red: #ec8c7e;
+  --hl-red-bg: rgba(236, 140, 126, 0.28);
+  --hl-blue: #7faee8;
+  --hl-blue-bg: rgba(127, 174, 232, 0.28);
   color-scheme: dark;
 }
 
-html,
-body,
-#root {
-  height: 100%;
+:root[data-theme="clair"] {
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --surface-2: #f7f5f1;
+  --surface-3: #f0ede8;
+  --surface-4: #eae6df;
+  --line: #efede8;
+  --line-strong: #e7e5e0;
+  --text: #141414;
+  --soft: #3f3c39;
+  --read: #3f3c39;
+  --muted: #57534e;
+  --subtle: #6b6660;
+  --accent: #7d48b5;
+  --accent-ink: #5e3290;
+  --tag-bg: #f4edfb;
+  --tag-fg: #5e3290;
+  --claude-bg: #f4edfb;
+  --active: #f4edfb;
+  --ring: 0 0 0 1px #efede8;
+  --lift: 0 0 0 1px #eae7e1, 0 24px 48px -28px rgba(20, 20, 20, 0.25);
+  --menu: 0 0 0 1px #efede8, 0 40px 80px -30px rgba(20, 20, 20, 0.35);
+  --modal: 0 0 0 1px #efede8, 0 60px 120px -30px rgba(0, 0, 0, 0.35);
+  --pop: #ffffff;
+  --field: #faf8f5;
+  --btn-bg: #7d48b5;
+  --btn-fg: #ffffff;
+  --btn-sh: 0 4px 0 #56298a, 0 14px 30px -14px rgba(125, 72, 181, 0.7);
+  --btn-sh-a: 0 1px 0 #56298a, 0 6px 16px -10px rgba(125, 72, 181, 0.5);
+  --scrim: rgba(20, 20, 20, 0.28);
+  --ok: #0b7a52;
+  --warn: #7a4800;
+  --err: #b42318;
+  --fresh: #f4edfb;
+  --ph-a: #f2efe9;
+  --ph-line: #e7e5e0;
+  --hl-yellow: #c9951a;
+  --hl-yellow-bg: #fbebb5;
+  --hl-green: #0b7a52;
+  --hl-green-bg: #d6f0e1;
+  --hl-red: #b42318;
+  --hl-red-bg: #fadcd6;
+  --hl-blue: #2f66b3;
+  --hl-blue-bg: #dce8f8;
+  color-scheme: light;
 }
 
-body {
-  margin: 0;
-  background: var(--color-bg);
-  color: var(--color-text-soft);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-surface-4: var(--surface-4);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-text: var(--text);
+  --color-soft: var(--soft);
+  --color-read: var(--read);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-tag-bg: var(--tag-bg);
+  --color-tag-fg: var(--tag-fg);
+  --color-claude-bg: var(--claude-bg);
+  --color-active: var(--active);
+  --color-pop: var(--pop);
+  --color-field: var(--field);
+  --color-btn-bg: var(--btn-bg);
+  --color-btn-fg: var(--btn-fg);
+  --color-scrim: var(--scrim);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-err: var(--err);
+  --color-fresh: var(--fresh);
+  --shadow-ring: var(--ring);
+  --shadow-lift: var(--lift);
+  --shadow-menu: var(--menu);
+  --shadow-modal: var(--modal);
+  --shadow-btn: var(--btn-sh);
+  --shadow-btn-active: var(--btn-sh-a);
 }
 
-:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
+@keyframes sv-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes sv-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+@keyframes sv-blink {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes sv-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  button,
+  input,
+  textarea {
+    font: inherit;
+  }
+
+  ::selection {
+    background: rgba(167, 116, 212, 0.42);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

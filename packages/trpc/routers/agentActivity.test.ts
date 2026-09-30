@@ -63,3 +63,34 @@ describe("Agent activity", () => {
     ).rejects.toThrow();
   });
 });
+
+describe("Reading progress", () => {
+  test<CustomTestContext>("returns the last unfinished reading", async ({
+    apiCallers,
+  }) => {
+    const api = apiCallers[0];
+    const first = await api.bookmarks.createBookmark({
+      type: BookmarkTypes.LINK,
+      url: "https://example.com/a",
+    });
+    const second = await api.bookmarks.createBookmark({
+      type: BookmarkTypes.LINK,
+      url: "https://example.com/b",
+    });
+    expect(await api.readingProgress.current()).toBeNull();
+    await api.bookmarks.updateReadingProgress({
+      bookmarkId: first.id,
+      readingProgressOffset: 120,
+      readingProgressPercent: 42,
+    });
+    await api.bookmarks.updateReadingProgress({
+      bookmarkId: second.id,
+      readingProgressOffset: 900,
+      readingProgressPercent: 100,
+    });
+    expect((await api.readingProgress.current())?.bookmarkId).toEqual(first.id);
+    expect(
+      (await api.readingProgress.get({ bookmarkId: first.id }))?.percent,
+    ).toEqual(42);
+  });
+});

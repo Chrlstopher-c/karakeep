@@ -8,8 +8,8 @@ import type { Connection } from "./connection-store";
 import { useConnectForm } from "./useConnectForm";
 
 const FIELD =
-  "h-11 w-full rounded-xl border border-border bg-surface-2 px-3.5 text-text " +
-  "placeholder:text-text-muted focus:border-accent focus:outline-none";
+  "h-11 w-full rounded-xl border border-line bg-field px-3.5 text-text " +
+  "placeholder:text-muted focus:border-accent focus:outline-none";
 
 export function ConnectionScreen({
   onConnect,
@@ -27,7 +27,7 @@ export function ConnectionScreen({
     >
       <form
         onSubmit={form.submit}
-        className="bg-surface grid w-full max-w-md gap-5 rounded-[28px] border border-border p-8"
+        className="bg-surface border-line grid w-full max-w-md gap-5 rounded-[28px] border p-8"
       >
         <img src={symbolUrl} alt="" className="h-10 w-10" />
         <div className="grid gap-1.5">
@@ -57,14 +57,11 @@ export function ConnectionScreen({
           required
         />
         {form.error && (
-          <p
-            role="alert"
-            className="text-accent-text m-0 font-mono text-[13px]"
-          >
+          <p role="alert" className="text-accent-ink m-0 font-mono text-[13px]">
             {form.error}
           </p>
         )}
-        <Button type="submit" disabled={form.busy}>
+        <Button variant="primary" type="submit" disabled={form.busy}>
           {form.busy ? "Vérification…" : "Se connecter"}
         </Button>
       </form>
