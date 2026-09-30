@@ -26,6 +26,8 @@ cat > "$BIN/savoir" <<LAUNCHER
 #!/usr/bin/env bash
 # WebKitGTK + NVIDIA : le rendu DMA-BUF provoque des fenêtres blanches.
 export WEBKIT_DISABLE_DMABUF_RENDERER=1
+# WebKitGTK : suivi DRM de la fréquence d'écran à 0 Hz au réveil → SIGFPE.
+export WEBKIT_FORCE_VBLANK_TIMER=1
 exec "$DEST/savoir" "\$@"
 LAUNCHER
 chmod 755 "$BIN/savoir"

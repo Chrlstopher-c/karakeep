@@ -5,7 +5,18 @@ mod connection;
 use tauri::Manager;
 use tauri_plugin_log::{Target, TargetKind};
 
+// WebKitGTK sous Wayland : rendu DMA-BUF instable (NVIDIA) et suivi DRM de la fréquence
+// d'écran qui lit 0 Hz au réveil de l'écran (SIGFPE). Réglages par défaut, surchargeables.
+fn webkit_workarounds() {
+    for (key, value) in [("WEBKIT_DISABLE_DMABUF_RENDERER", "1"), ("WEBKIT_FORCE_VBLANK_TIMER", "1")] {
+        if std::env::var_os(key).is_none() {
+            std::env::set_var(key, value);
+        }
+    }
+}
+
 pub fn run() {
+    webkit_workarounds();
     let log = tauri_plugin_log::Builder::new()
         .targets([
             Target::new(TargetKind::Stdout),
