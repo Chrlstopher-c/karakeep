@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@import "@fontsource-variable/manrope";
+@import "@fontsource-variable/jetbrains-mono";
+@import "../../design/tokens.css";
+
+/* Rôles sémantiques du thème night (défaut) ; le thème clair viendra avec la maquette. */
+@theme {
+  --color-bg: var(--color-night);
+  --color-surface: var(--color-night-2);
+  --color-surface-2: var(--color-night-3);
+  --color-border: var(--color-night-line);
+  --color-text: var(--color-night-text);
+  --color-text-soft: var(--color-night-soft);
+  --color-text-muted: var(--color-night-muted);
+  --color-accent: var(--color-brand-400);
+  --color-accent-text: var(--color-brand-light);
+}
+
+:root {
+  --font-manrope: "Manrope Variable";
+  --font-jetbrains: "JetBrains Mono Variable";
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text-soft);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}

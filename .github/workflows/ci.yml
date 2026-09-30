@@ -27,7 +27,7 @@ jobs:
         uses: ./tooling/github/setup
 
       - name: Lint
-        run: pnpm lint && pnpm exec sherif
+        run: pnpm lint && pnpm exec sherif -i tailwindcss
 
   format:
     runs-on: ubuntu-latest
@@ -127,3 +127,41 @@ jobs:
           else
             echo "✅ Generated files are up to date!"
           fi
+
+  desktop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - name: Setup
+        uses: ./tooling/github/setup
+
+      - name: System libraries (Tauri / WebKitGTK)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev patchelf
+
+      - name: Rust toolchain
+        run: rustup toolchain install stable --profile minimal --component clippy && rustup default stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            apps/desktop/src-tauri/target
+          key: cargo-${{ runner.os }}-${{ hashFiles('apps/desktop/src-tauri/Cargo.lock') }}
+
+      - name: Build frontend
+        run: pnpm --filter @karakeep/desktop build
+
+      - name: Clippy
+        working-directory: apps/desktop/src-tauri
+        run: cargo clippy --locked --all-targets -- -D warnings
+
+      - name: Rust tests
+        working-directory: apps/desktop/src-tauri
+        run: cargo test --locked
