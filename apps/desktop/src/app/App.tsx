@@ -10,7 +10,7 @@ import type { Connection } from "../connection/connection-store";
 import { useConnection } from "../connection/useConnection";
 import { NavigationProvider } from "./navigation";
 import { Shell } from "./Shell";
-import { useTheme } from "./useTheme";
+import { ThemeContext, useTheme } from "./useTheme";
 
 function ConnectedApp({
   connection,
@@ -40,21 +40,23 @@ function ConnectedApp({
 export function App(): ReactElement {
   const { state, connect, disconnect } = useConnection();
   const onDisconnect = useCallback(() => void disconnect(), [disconnect]);
-  useTheme();
+  const theme = useTheme();
   return (
-    <MotionConfig reducedMotion="user">
-      <AnimatePresence mode="wait">
-        {state.status === "missing" && (
-          <ConnectionScreen key="connexion" onConnect={connect} />
-        )}
-        {state.status === "ready" && (
-          <ConnectedApp
-            key="app"
-            connection={state.connection}
-            onDisconnect={onDisconnect}
-          />
-        )}
-      </AnimatePresence>
-    </MotionConfig>
+    <ThemeContext.Provider value={theme}>
+      <MotionConfig reducedMotion="user">
+        <AnimatePresence mode="wait">
+          {state.status === "missing" && (
+            <ConnectionScreen key="connexion" onConnect={connect} />
+          )}
+          {state.status === "ready" && (
+            <ConnectedApp
+              key="app"
+              connection={state.connection}
+              onDisconnect={onDisconnect}
+            />
+          )}
+        </AnimatePresence>
+      </MotionConfig>
+    </ThemeContext.Provider>
   );
 }

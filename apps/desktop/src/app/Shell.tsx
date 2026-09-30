@@ -2,12 +2,15 @@ import type { ReactElement } from "react";
 import { useRef, useState } from "react";
 import { AnimatePresence } from "motion/react";
 
-import { useFollow } from "../claude/useFollow";
+import { CaptureDialog } from "../capture/CaptureDialog";
 import { useAgentActivity } from "../claude/useAgentActivity";
+import { useFollow } from "../claude/useFollow";
 import {
   serverLabel,
   useActiveConnection,
 } from "../connection/ConnectionContext";
+import { Palette } from "../palette/Palette";
+import { ErrorBoundary } from "./ErrorBoundary";
 import { FollowBanner } from "./FollowBanner";
 import { useNavigation } from "./navigation";
 import { OfflineBanner } from "./OfflineBanner";
@@ -15,6 +18,9 @@ import { Screens } from "./Screens";
 import { ScrollContext } from "./scroll";
 import { Sidebar } from "./Sidebar";
 import { Titlebar } from "./Titlebar";
+import { Toasts, useToasts } from "./Toasts";
+import { useCaptureShortcut } from "./useCaptureShortcut";
+import { useOverlays } from "./useOverlays";
 import { useServerHealth } from "./useServerHealth";
 import { useShortcuts } from "./useShortcuts";
 
@@ -27,15 +33,15 @@ export function Shell(): ReactElement {
   const follow = useFollow(activity.items);
   const health = useServerHealth(connection.address);
   const label = serverLabel(connection.address);
-  const openCapture = (): void => undefined;
-  const openPalette = (): void => undefined;
-
+  const { toasts, notify, dismiss } = useToasts();
+  const o = useOverlays(follow, notify);
   useShortcuts({
-    openPalette,
-    openCapture,
-    toggleFollow: follow.toggle,
-    escape: () => (follow.following ? (follow.stop(), true) : false),
+    openPalette: o.openPalette,
+    openCapture: o.openCapture,
+    toggleFollow: o.toggleFollow,
+    escape: o.escape,
   });
+  useCaptureShortcut(o.openCapture);
 
   return (
     <div className="bg-bg text-text relative flex h-screen min-h-[640px] min-w-[960px] overflow-hidden">
@@ -48,7 +54,7 @@ export function Shell(): ReactElement {
         online={health.online}
       />
       <main className="relative flex min-w-0 flex-1 flex-col">
-        <Titlebar onOpenPalette={openPalette} />
+        <Titlebar onOpenPalette={o.openPalette} />
         <AnimatePresence>
           {!health.online && (
             <OfflineBanner
@@ -63,7 +69,7 @@ export function Shell(): ReactElement {
               key="follow"
               status={follow.status}
               busy={activity.busy}
-              onStop={() => follow.stop()}
+              onStop={o.stopFollow}
             />
           )}
         </AnimatePresence>
@@ -72,16 +78,37 @@ export function Shell(): ReactElement {
           className="relative min-h-0 flex-1 overflow-y-auto overflow-x-hidden"
         >
           <ScrollContext.Provider value={scrollRef}>
-            <Screens
-              activity={activity}
-              onFollow={follow.start}
-              onCapture={openCapture}
-              following={follow.following}
-              onToggleFollow={follow.toggle}
-            />
+            <ErrorBoundary resetKey={JSON.stringify(route)}>
+              <Screens
+                activity={activity}
+                onFollow={follow.start}
+                onCapture={o.openCapture}
+                following={follow.following}
+                onToggleFollow={o.toggleFollow}
+              />
+            </ErrorBoundary>
           </ScrollContext.Provider>
         </div>
+        <Toasts toasts={toasts} dismiss={dismiss} />
       </main>
+      <AnimatePresence>
+        {o.palette && (
+          <ErrorBoundary key="palette">
+            <Palette
+              onClose={o.closePalette}
+              onCapture={o.openCapture}
+              onToggleFollow={o.toggleFollow}
+            />
+          </ErrorBoundary>
+        )}
+        {o.capture && (
+          <CaptureDialog
+            key="capture"
+            onClose={o.closeCapture}
+            onSaved={(m) => notify(m)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

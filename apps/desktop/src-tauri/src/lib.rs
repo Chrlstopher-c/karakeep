@@ -1,6 +1,8 @@
+mod capture_shortcut;
 mod claude_code;
 mod connection;
 
+use tauri::Manager;
 use tauri_plugin_log::{Target, TargetKind};
 
 pub fn run() {
@@ -14,8 +16,23 @@ pub fn run() {
         .build();
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_single_instance::init(|app, args, _cwd| {
+            if args.iter().any(|a| a == "--capture") {
+                capture_shortcut::show_capture(app);
+            } else if let Some(window) = app.get_webview_window("main") {
+                let _ = window.show();
+                let _ = window.set_focus();
+            }
+        }))
         .plugin(log)
         .plugin(tauri_plugin_opener::init())
+        .setup(|app| {
+            capture_shortcut::register(app)?;
+            if std::env::args().any(|a| a == "--capture") {
+                capture_shortcut::show_capture(app.handle());
+            }
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
             connection::load_connection,
             connection::save_connection,

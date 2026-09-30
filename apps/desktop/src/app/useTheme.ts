@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 export type ThemePreference = "night" | "clair" | "systeme";
 
@@ -46,4 +52,17 @@ export function useTheme(): {
   }, []);
 
   return { preference, setPreference };
+}
+
+export interface ThemeControl {
+  preference: ThemePreference;
+  setPreference: (p: ThemePreference) => void;
+}
+
+export const ThemeContext = createContext<ThemeControl | null>(null);
+
+export function useThemeControl(): ThemeControl {
+  const theme = useContext(ThemeContext);
+  if (!theme) throw new Error("useThemeControl hors de ThemeContext");
+  return theme;
 }

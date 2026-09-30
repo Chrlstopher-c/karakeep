@@ -11,8 +11,8 @@ Port React fidèle au prototype, écran par écran, CI verte à chaque palier.
 - [x] Lecteur : article/capture/archive, barre de surlignage 1-4 + note, panneau surlignages/infos, surlignage animé
 - [x] Décisions : colonnes ouvertes/tranchées/abandonnées + fiche (options, retenir, conséquences, sources liées)
 - [ ] Surlignages (mur), Projets, Tags, Réglages
-- [ ] Claude : état MCP, écriture de ~/.claude.json, clé Claude, outils, journal d'activité, mode suivi (F)
-- [ ] Palette ⌘K, capture rapide (raccourci global), notifications groupées, hors ligne
+- [x] Claude : état MCP, écriture de ~/.claude.json, clé Claude, outils, journal d'activité, mode suivi (F)
+- [x] Palette ⌘K, capture rapide (raccourci global), notifications groupées, hors ligne
 - [ ] Paquet Arch + note d'usage
 
 Notes : app lancée par apps/desktop/dev.sh ; clé de l'app « Savoir (Chris) » (non agent) dans
