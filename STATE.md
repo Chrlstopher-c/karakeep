@@ -77,3 +77,6 @@ Branche `echo` = nos changements ; `main` suit l'upstream (karakeep-app/karakeep
 - Joignable seulement sur le réseau local (bind 0.0.0.0) ; pas de tunnel.
 - Savoir : PDF non affichés dans l'app (WebKitGTK), ouverture externe à ajouter ; pas de tiroir d'activité.
 - Pas d'inférence IA intégrée (tags/résumés auto) : c'est Claude qui classe via le MCP.
+- WebKitGTK 2.52 : plantage SIGFPE quand le suivi DRM de la fréquence d'écran lit 0 Hz (veille/réveil d'écran).
+  Parade : `WEBKIT_FORCE_VBLANK_TIMER=1`, posé par Savoir au démarrage (`src-tauri/src/lib.rs`) et par ses
+  lanceurs. Touche aussi les autres apps WebKit de la machine (variable ajoutée à l'environnement Hyprland).
