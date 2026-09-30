@@ -22,11 +22,16 @@ export function useConnection(): UseConnection {
   const [state, setState] = useState<ConnectionState>({ status: "loading" });
 
   useEffect(() => {
-    void loadConnection().then((connection) =>
-      setState(
-        connection ? { status: "ready", connection } : { status: "missing" },
-      ),
-    );
+    let cancelled = false;
+    void loadConnection().then((connection) => {
+      if (!cancelled)
+        setState(
+          connection ? { status: "ready", connection } : { status: "missing" },
+        );
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const connect = useCallback(async (connection: Connection) => {

@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { AnimatePresence, MotionConfig } from "motion/react";
 
 import { TRPCSettingsProvider } from "@karakeep/shared-react/providers/trpc-provider";
@@ -19,13 +19,16 @@ function ConnectedApp({
   connection: Connection;
   onDisconnect: () => void;
 }): ReactElement {
+  const { address, apiKey } = connection;
+  // Un seul client tRPC par couple adresse/clé, même si la connexion est relue.
+  const settings = useMemo(() => ({ address, apiKey }), [address, apiKey]);
   const active = useMemo(
-    () => ({ ...connection, disconnect: onDisconnect }),
-    [connection, onDisconnect],
+    () => ({ ...settings, disconnect: onDisconnect }),
+    [settings, onDisconnect],
   );
   return (
     <ConnectionContext.Provider value={active}>
-      <TRPCSettingsProvider settings={connection}>
+      <TRPCSettingsProvider settings={settings}>
         <NavigationProvider>
           <Shell />
         </NavigationProvider>
@@ -36,6 +39,7 @@ function ConnectedApp({
 
 export function App(): ReactElement {
   const { state, connect, disconnect } = useConnection();
+  const onDisconnect = useCallback(() => void disconnect(), [disconnect]);
   useTheme();
   return (
     <MotionConfig reducedMotion="user">
@@ -47,7 +51,7 @@ export function App(): ReactElement {
           <ConnectedApp
             key="app"
             connection={state.connection}
-            onDisconnect={() => void disconnect()}
+            onDisconnect={onDisconnect}
           />
         )}
       </AnimatePresence>

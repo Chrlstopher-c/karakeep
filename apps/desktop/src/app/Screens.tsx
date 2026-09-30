@@ -2,6 +2,8 @@ import type { ReactElement } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
 import type { AgentActivity } from "../claude/useAgentActivity";
+import { DecisionsScreen } from "../decisions/DecisionsScreen";
+import { SheetScreen } from "../decisions/SheetScreen";
 import { HomeScreen } from "../home/HomeScreen";
 import { ReaderScreen } from "../reader/ReaderScreen";
 import { SourcesScreen } from "../sources/SourcesScreen";
@@ -32,6 +34,10 @@ function renderScreen(route: Route, actions: ScreenActions): ReactElement {
   switch (route.screen) {
     case "home":
       return <HomeScreen {...actions} />;
+    case "decisions":
+      return <DecisionsScreen />;
+    case "sheet":
+      return <SheetScreen bookmarkId={route.bookmarkId} />;
     case "reader":
       return (
         <ReaderScreen
