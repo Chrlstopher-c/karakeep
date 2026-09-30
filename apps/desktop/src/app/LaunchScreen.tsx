@@ -90,10 +90,7 @@ export function LaunchScreen({ onDone }: { onDone: () => void }): ReactElement {
   const logoRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    const full = !reduced && shouldPlayFull();
+    const full = PLAY_FULL;
     const svg = logoRef.current?.querySelector("svg");
     if (full && svg) animateLogo(svg);
     const hold = full ? FULL_MS : SHORT_MS;
