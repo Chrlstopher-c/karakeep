@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence } from "motion/react";
 
 import { useFollow } from "../claude/useFollow";
@@ -12,6 +12,7 @@ import { FollowBanner } from "./FollowBanner";
 import { useNavigation } from "./navigation";
 import { OfflineBanner } from "./OfflineBanner";
 import { Screens } from "./Screens";
+import { ScrollContext } from "./scroll";
 import { Sidebar } from "./Sidebar";
 import { Titlebar } from "./Titlebar";
 import { useServerHealth } from "./useServerHealth";
@@ -21,6 +22,7 @@ export function Shell(): ReactElement {
   const connection = useActiveConnection();
   const { route } = useNavigation();
   const [collapsed, setCollapsed] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const activity = useAgentActivity();
   const follow = useFollow(activity.items);
   const health = useServerHealth(connection.address);
@@ -65,12 +67,17 @@ export function Shell(): ReactElement {
             />
           )}
         </AnimatePresence>
-        <div className="relative min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-          <Screens
-            activity={activity}
-            onFollow={follow.start}
-            onCapture={openCapture}
-          />
+        <div
+          ref={scrollRef}
+          className="relative min-h-0 flex-1 overflow-y-auto overflow-x-hidden"
+        >
+          <ScrollContext.Provider value={scrollRef}>
+            <Screens
+              activity={activity}
+              onFollow={follow.start}
+              onCapture={openCapture}
+            />
+          </ScrollContext.Provider>
         </div>
       </main>
     </div>

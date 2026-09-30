@@ -36,7 +36,7 @@ export function SourceCard({
     <button
       type="button"
       onClick={onOpen}
-      className={`bg-surface relative flex cursor-pointer flex-col overflow-hidden rounded-3xl border-0 p-0 text-left shadow-ring ${LIFT} ${focused ? "shadow-[inset_0_0_0_2px_var(--accent)]" : ""}`}
+      className={`bg-surface relative flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-3xl border-0 p-0 text-left shadow-ring ${LIFT} ${focused ? "outline-2 outline-offset-2 outline-accent" : ""}`}
     >
       <Media
         imageUrl={source.imageUrl}

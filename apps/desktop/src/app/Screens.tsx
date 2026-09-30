@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from "motion/react";
 
 import type { AgentActivity } from "../claude/useAgentActivity";
 import { HomeScreen } from "../home/HomeScreen";
+import { ReaderScreen } from "../reader/ReaderScreen";
+import { SourcesScreen } from "../sources/SourcesScreen";
 import { Eyebrow } from "../shared/Eyebrow";
 import { EASE_OUT_SOFT } from "../shared/motion";
 import type { Route } from "./navigation";
@@ -30,6 +32,15 @@ function renderScreen(route: Route, actions: ScreenActions): ReactElement {
   switch (route.screen) {
     case "home":
       return <HomeScreen {...actions} />;
+    case "reader":
+      return (
+        <ReaderScreen
+          bookmarkId={route.bookmarkId}
+          highlightId={route.highlightId}
+        />
+      );
+    case "sources":
+      return <SourcesScreen onCapture={actions.onCapture} />;
     default:
       return <Pending title={route.screen} />;
   }

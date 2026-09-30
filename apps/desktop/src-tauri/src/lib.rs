@@ -14,6 +14,7 @@ pub fn run() {
 
     tauri::Builder::default()
         .plugin(log)
+        .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             connection::load_connection,
             connection::save_connection,
