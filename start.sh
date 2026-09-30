@@ -22,7 +22,12 @@ lancer meili "$RT/meilisearch" --db-path "$RT/meili" --http-addr 127.0.0.1:7700 
   --master-key "$MEILI_MASTER_KEY" --no-analytics --env production
 lancer chrome google-chrome-stable --headless=new --remote-debugging-address=127.0.0.1 \
   --remote-debugging-port=9222 --user-data-dir="$PWD/$RT/chrome" --disable-gpu --no-first-run \
-  --hide-scrollbars --disable-blink-features=AutomationControlled --window-size=1440,900
-lancer web pnpm --dir apps/web exec next start -p "$PORT" -H "${KARAKEEP_HOST:-127.0.0.1}"
-lancer workers pnpm --dir apps/workers exec tsx index.ts
+  --hide-scrollbars --disable-blink-features=AutomationControlled --window-size=1440,900 \
+  --disable-extensions --disable-background-networking --disable-component-update --disable-sync \
+  --renderer-process-limit=2
+# Node lancé directement (sans pnpm ni le lanceur tsx) : un processus par service au lieu de trois.
+TSX="$PWD/node_modules/tsx/dist"
+lancer web env -C apps/web node "$PWD/node_modules/next/dist/bin/next" start -p "$PORT" \
+  -H "${KARAKEEP_HOST:-127.0.0.1}"
+lancer workers env -C apps/workers node --require "$TSX/preflight.cjs" --import "file://$TSX/loader.mjs" index.ts
 echo "Karakeep : http://localhost:$PORT"
