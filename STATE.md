@@ -26,6 +26,28 @@ Branche `echo` = nos changements ; `main` suit l'upstream (karakeep-app/karakeep
   - Notes markdown : `==surligné==`, `=={green|red|blue|yellow}texte==`, blocs ```mermaid rendus en schémas.
   - Vue en direct : requêtes bookmarks/highlights/lists/tags rechargées toutes les 4 s (onglet visible).
 
+- Serveur (tRPC) :
+  - Provenance des agents : colonne `apiKey.agent` ; toute mutation faite avec une clé agent est journalisée dans
+    `agentActivity` (middleware sur `authedProcedure`, hors gestion des clés). Routeur `agentActivity` :
+    `list`, `provenance`, `keys`, `setAgent`, `createAgentKey`, `revokeAgentKey` (clé pleine requise).
+  - `readingProgress.get` / `readingProgress.current` (l'amont n'écrivait que la progression).
+- Clés locales : « claude » (agent=claude, utilisée par le MCP) et « Savoir (Chris) » (l'app, sans agent).
+
+## Savoir — client desktop (`apps/desktop`, voir son README et son ARCHITECTURE)
+- Tauri 2 + React 19 + Tailwind 4 + motion ; maquettes Claude Design portées écran par écran
+  (`apps/desktop/design/mockups`). Installé via `apps/desktop/packaging/install-local.sh` → `~/.local/bin/savoir`.
+- Écrans : accueil, sources (3 vues, filtres, J/K), lecteur (surlignage animé 1-4, panneau, progression, notes
+  Markdown/Mermaid, capture/archive), décisions (colonnes + fiche : retenir/annuler, édition E), surlignages, projets
+  (tags projet:), tags (renommer/fusionner), Claude (MCP embarqué déclaré dans ~/.claude.json, clés agent, journal),
+  réglages, palette ⌘K (plein texte), capture ⌘L / `savoir --capture`, suivi de Claude (F), lancement animé.
+- Direct : journal agent interrogé toutes les 2,5 s ; toute nouvelle action rafraîchit les données.
+- Choix faits sans Chris (à revoir s'il le souhaite) : nom « Savoir » ; tokens de surlignage proposés par Claude
+  Design adoptés tels quels ; « Retenir » tranche sans confirmation mais propose « Annuler et rouvrir » ; lancement
+  complet au premier démarrage et après mise à jour, fondu court sinon ; la pastille Claude ouvre l'écran Claude (pas de
+  tiroir) ; composants JSX tolérés jusqu'à ~60 lignes (formateur), logique ≤ 35 lignes.
+- Hyprland : le raccourci global X11 ne voit pas les touches sous Wayland → lier
+  `bind = CTRL SHIFT, SPACE, exec, ~/.local/bin/savoir --capture` (non ajouté à la config de Chris).
+
 ## Organisation de la base (données, pas dans git)
 - Listes : 🧭 Décisions · 📚 Sources · 🗂️ Projets · 📘 Guide.
 - Tags : `projet:<nom>`, `statut:ouverte|tranchée|abandonnée`, `sujet:<thème>` ; couleurs jaune=clé, vert=pour,
@@ -43,6 +65,14 @@ Branche `echo` = nos changements ; `main` suit l'upstream (karakeep-app/karakeep
 - Note avec bannière, surlignages colorés, schéma mermaid et image intégrée : rendu contrôlé dans Chrome.
 - Surlignage ajouté par le MCP apparu sans rechargement dans un onglet ouvert.
 
+## Vérifié (30/09, nuit)
+- Mode suivi de bout en bout : surlignage posé par le MCP → l'app ouvre le lecteur, balaye le passage (pointillé
+  Claude), carte CLAUDE dans le panneau, bandeau puis notification récapitulative.
+- Surlignage depuis l'app : décalages identiques à ceux du serveur/MCP (vérifié sur le texte linkedom).
+- Fiche de décision : création, retenir, annuler ; capture d'une note ; palette plein texte ; build de production
+  installé et lancé ; `savoir --capture` rejoint l'instance ouverte.
+
 ## Limites connues
 - Joignable seulement sur le réseau local (bind 0.0.0.0) ; pas de tunnel.
+- Savoir : PDF non affichés dans l'app (WebKitGTK), ouverture externe à ajouter ; pas de tiroir d'activité.
 - Pas d'inférence IA intégrée (tags/résumés auto) : c'est Claude qui classe via le MCP.

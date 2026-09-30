@@ -13,7 +13,7 @@ Port React fidèle au prototype, écran par écran, CI verte à chaque palier.
 - [x] Surlignages (mur), Projets, Tags, Réglages
 - [x] Claude : état MCP, écriture de ~/.claude.json, clé Claude, outils, journal d'activité, mode suivi (F)
 - [x] Palette ⌘K, capture rapide (raccourci global), notifications groupées, hors ligne
-- [ ] Paquet Arch + note d'usage
+- [x] Installation locale (`packaging/install-local.sh`) ; CI desktop (tests, MCP embarqué, clippy, tests Rust)
 
 Notes : app lancée par apps/desktop/dev.sh ; clé de l'app « Savoir (Chris) » (non agent) dans
 ~/.config/agency.echo.savoir/connexion.json ; clé MCP « claude » marquée agent=claude.
@@ -23,6 +23,8 @@ Notes : app lancée par apps/desktop/dev.sh ; clé de l'app « Savoir (Chris) »
 - [x] Démarrage automatique (service systemd user `karakeep`).
 
 ## Backlog
+- [ ] Savoir : PKGBUILD Arch, visionneuse PDF, tiroir d'activité, édition riche des notes (vague 2 de Claude Design).
+- [ ] Savoir : décider si le MCP de Claude Code passe par la déclaration de Savoir (bouton « Reconfigurer »).
 - [ ] Lier en service systemd sans session ouverte (`loginctl enable-linger`) si Chris le veut.
 - [ ] Accès hors maison (tunnel) — décision de Chris.
 - [ ] App iOS : apps/mobile (Expo) via EAS Build + Impactor.
