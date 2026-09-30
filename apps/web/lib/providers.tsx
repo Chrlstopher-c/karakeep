@@ -86,7 +86,7 @@ export default function Providers({
         <SessionProvider session={session}>
           <QueryClientProvider client={queryClient}>
             <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-              <LiveRefresh />
+              <LiveRefresh enabled={!!session} />
               <CustomI18nextProvider lang={userLocalSettings.lang}>
                 <ThemeProvider
                   attribute="class"

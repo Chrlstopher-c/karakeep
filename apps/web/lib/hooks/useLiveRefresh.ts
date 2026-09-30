@@ -1,32 +1,29 @@
-import { useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-// Vue en direct : tant que l'onglet est visible, les données affichées sont
-// rechargées régulièrement, pour voir apparaître ce qu'un agent fait via l'API.
+import { useTRPC } from "@karakeep/shared-react/trpc";
+
+// Vue en direct : le journal des agents (fork Echo) est sondé toutes les 4 s ;
+// quand un agent comme Claude a agi, les données affichées sont rechargées.
+// Sans action d'agent, rien n'est rechargé (pas d'éléments reconstruits sous le curseur).
 const LIVE_ROUTERS = new Set(["bookmarks", "highlights", "lists", "tags"]);
 const LIVE_INTERVAL_MS = 4000;
 
-// Pas de rechargement pendant une interaction (dialogue, menu, saisie) : les
-// éléments se reconstruiraient sous le curseur.
-function isInteracting(): boolean {
-  const active = document.activeElement;
-  const typing =
-    active instanceof HTMLInputElement ||
-    active instanceof HTMLTextAreaElement ||
-    (active instanceof HTMLElement && active.isContentEditable);
-  return (
-    typing ||
-    document.querySelector(
-      '[role="dialog"], [role="menu"], [role="listbox"], [data-radix-popper-content-wrapper]',
-    ) !== null
-  );
-}
-
-export function useLiveRefresh(): void {
+export function useLiveRefresh(enabled: boolean): void {
+  const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const latest = useQuery({
+    ...trpc.agentActivity.list.queryOptions({ limit: 1 }),
+    enabled,
+    refetchInterval: LIVE_INTERVAL_MS,
+    refetchIntervalInBackground: false,
+  });
+  const newestId = latest.data?.items[0]?.id;
+  const seen = useRef<string | undefined>(undefined);
+
   useEffect(() => {
-    const timer = window.setInterval(() => {
-      if (document.visibilityState !== "visible" || isInteracting()) return;
+    if (newestId === undefined) return;
+    if (seen.current !== undefined && seen.current !== newestId) {
       void queryClient.invalidateQueries({
         refetchType: "active",
         predicate: (query) => {
@@ -34,12 +31,12 @@ export function useLiveRefresh(): void {
           return Array.isArray(path) && LIVE_ROUTERS.has(String(path[0]));
         },
       });
-    }, LIVE_INTERVAL_MS);
-    return () => window.clearInterval(timer);
-  }, [queryClient]);
+    }
+    seen.current = newestId;
+  }, [newestId, queryClient]);
 }
 
-export function LiveRefresh(): null {
-  useLiveRefresh();
+export function LiveRefresh({ enabled }: { enabled: boolean }): null {
+  useLiveRefresh(enabled);
   return null;
 }
