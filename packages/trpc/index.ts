@@ -17,6 +17,7 @@ import serverConfig from "@karakeep/shared/config";
 import { getReadOnlyModeError } from "@karakeep/shared/readOnlyMode";
 
 import { createRateLimitMiddleware } from "./lib/rateLimit";
+import { recordAgentActivity } from "./lib/agentActivity";
 import { createTracingMiddleware } from "./lib/tracing";
 import {
   apiErrorsTotalCounter,
@@ -35,6 +36,7 @@ export type RequestAuth =
   | {
       type: "apiKey";
       keyId: string;
+      agent?: string | null;
       scopes: ZApiKeyScope[];
     }
   | {
@@ -154,6 +156,22 @@ export const authedProcedure = procedure
         user,
       },
     });
+  })
+  .use(async function logAgentMutations(opts) {
+    const res = await opts.next();
+    if (
+      opts.type === "mutation" &&
+      res.ok &&
+      opts.ctx.auth?.type === "apiKey"
+    ) {
+      await recordAgentActivity(
+        opts.ctx,
+        opts.path,
+        await opts.getRawInput(),
+        res.data,
+      );
+    }
+    return res;
   });
 
 function hasRequiredApiKeyScopes(

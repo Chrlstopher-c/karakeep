@@ -23,6 +23,7 @@ export async function createContextFromRequest(req: Request) {
         auth: {
           type: "apiKey" as const,
           keyId: authResult.apiKey.keyId,
+          agent: authResult.apiKey.agent,
           scopes: authResult.apiKey.scopes,
         },
         db,

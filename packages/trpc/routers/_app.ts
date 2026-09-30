@@ -1,5 +1,6 @@
 import { router } from "../index";
 import { adminAppRouter } from "./admin";
+import { agentActivityAppRouter } from "./agentActivity";
 import { apiKeysAppRouter } from "./apiKeys";
 import { assetsAppRouter } from "./assets";
 import { backupsAppRouter } from "./backups";
@@ -37,6 +38,7 @@ export const appRouter = router({
   publicBookmarks: publicBookmarks,
   subscriptions: subscriptionsRouter,
   config: configAppRouter,
+  agentActivity: agentActivityAppRouter,
 });
 // export type definition of API
 export type AppRouter = typeof appRouter;

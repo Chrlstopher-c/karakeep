@@ -174,6 +174,7 @@ export async function authenticateApiKey(key: string, database: Context["db"]) {
     apiKey: {
       id: apiKey.id,
       keyId: apiKey.keyId,
+      agent: apiKey.agent,
       scopes: normalizeApiKeyScopes(apiKey.scopes),
     },
   };

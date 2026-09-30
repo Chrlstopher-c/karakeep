@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box}html,body{margin:0;background:#1E1830}a{color:#D5B8F0}a:hover{color:#F3F1F6}</style>
+</helmet>
+<div style="min-height:100vh;background:#1E1830;color:#F3F1F6;font-family:Manrope,sans-serif;padding:56px 40px 96px">
+<div style="max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:48px">
+
+<header style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:center;gap:10px;font:500 13px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#D5B8F0"><span style="width:8px;height:8px;border-radius:2px;background:#A774D4"></span>SAVOIR · VAGUE 1</div>
+<h1 style="margin:0;font:800 40px/1.1 Manrope,sans-serif;letter-spacing:-.04em">Notes de conception</h1>
+<p style="margin:0;font:500 16px/1.6 Manrope,sans-serif;color:#C8C4D0;max-width:64ch">Choix faits, spécification du mouvement et points à trancher. Le prototype est <a href="Savoir.dc.html">Savoir.dc.html</a>. Les réglages de démonstration (thème, mouvement réduit, hors ligne, chargement, état MCP, barre de titre) sont dans le panneau Tweaks.</p>
+</header>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<h2 style="margin:0;font:800 19px/1.2 Manrope,sans-serif;letter-spacing:-.025em">Parcours à tester</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
+<sc-for list="{{ flows }}" as="f" hint-placeholder-count="6"><div style="padding:18px 20px;border-radius:20px;background:#251E38;box-shadow:0 0 0 1px #362D4D;display:flex;flex-direction:column;gap:8px"><span style="font:500 11px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#D5B8F0">{{ f.n }}</span><span style="font:700 15px/1.35 Manrope,sans-serif">{{ f.t }}</span><span style="font:500 13px/1.5 Manrope,sans-serif;color:#A39DB5">{{ f.how }}</span></div></sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<h2 style="margin:0;font:800 19px/1.2 Manrope,sans-serif;letter-spacing:-.025em">Tokens proposés</h2>
+<p style="margin:0;font:500 14px/1.55 Manrope,sans-serif;color:#A39DB5;max-width:70ch">Absents de tokens.css, utilisés dans le prototype. À valider avant de les ajouter au thème.</p>
+<div style="border-radius:20px;background:#251E38;box-shadow:0 0 0 1px #362D4D;overflow:hidden">
+<sc-for list="{{ tokens }}" as="t" hint-placeholder-count="8"><div style="display:grid;grid-template-columns:minmax(0,1.3fr) 140px 140px minmax(0,1.4fr);gap:16px;align-items:center;padding:12px 20px;border-top:1px solid #362D4D">
+<span style="font:500 12.5px/1.3 'JetBrains Mono',monospace;color:#F3F1F6">{{ t.name }}</span>
+<span style="display:flex;align-items:center;gap:8px;font:400 11.5px/1 'JetBrains Mono',monospace;color:#C8C4D0"><span style="width:18px;height:18px;border-radius:6px;background:{{ t.night }};box-shadow:0 0 0 1px #4A3F63"></span>{{ t.nightLabel }}</span>
+<span style="display:flex;align-items:center;gap:8px;font:400 11.5px/1 'JetBrains Mono',monospace;color:#C8C4D0"><span style="width:18px;height:18px;border-radius:6px;background:{{ t.clair }};box-shadow:0 0 0 1px #4A3F63"></span>{{ t.clairLabel }}</span>
+<span style="font:500 13px/1.4 Manrope,sans-serif;color:#A39DB5">{{ t.role }}</span>
+</div></sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<h2 style="margin:0;font:800 19px/1.2 Manrope,sans-serif;letter-spacing:-.025em">Mouvement</h2>
+<p style="margin:0;font:500 14px/1.55 Manrope,sans-serif;color:#A39DB5;max-width:70ch">Seuls transform et opacity sont animés, sauf les trois exceptions signalées. Toute animation est interruptible&nbsp;: le clavier n’attend jamais.</p>
+<div style="border-radius:20px;background:#251E38;box-shadow:0 0 0 1px #362D4D;overflow:hidden">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr) 110px minmax(0,1fr);gap:16px;padding:12px 20px;font:500 10.5px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8E86A3"><span>MOMENT</span><span>PROPRIÉTÉS</span><span>DURÉE</span><span>MOUVEMENT RÉDUIT</span></div>
+<sc-for list="{{ motion }}" as="m" hint-placeholder-count="10"><div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr) 110px minmax(0,1fr);gap:16px;padding:14px 20px;border-top:1px solid #362D4D;font:500 13px/1.5 Manrope,sans-serif">
+<span style="font-weight:700;color:#F3F1F6">{{ m.what }}</span><span style="color:#C8C4D0">{{ m.props }}</span><span style="font:400 12px/1.5 'JetBrains Mono',monospace;color:#D5B8F0">{{ m.dur }}</span><span style="color:#A39DB5">{{ m.rm }}</span>
+</div></sc-for>
+</div>
+<p style="margin:0;font:400 12px/1.6 'JetBrains Mono',monospace;color:#8E86A3">COURBES · EASE-OUT-SOFT (.2,.7,.2,1) · AMORTI (.22,1,.36,1) · RESSORT (.34,1.4,.64,1) · BALAYAGE (.5,0,.3,1)</p>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<h2 style="margin:0;font:800 19px/1.2 Manrope,sans-serif;letter-spacing:-.025em">Choix faits</h2>
+<sc-for list="{{ choices }}" as="c" hint-placeholder-count="5"><div style="display:flex;gap:14px;align-items:flex-start"><span style="flex:none;width:7px;height:7px;margin-top:9px;border-radius:99px;background:#A774D4"></span><span style="font:500 15px/1.6 Manrope,sans-serif;color:#C8C4D0;max-width:72ch">{{ c }}</span></div></sc-for>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<h2 style="margin:0;font:800 19px/1.2 Manrope,sans-serif;letter-spacing:-.025em">À trancher par Chris</h2>
+<sc-for list="{{ open }}" as="c" hint-placeholder-count="5"><div style="display:flex;gap:14px;align-items:flex-start"><span style="flex:none;width:7px;height:7px;margin-top:9px;border-radius:99px;background:#7FAEE8"></span><span style="font:500 15px/1.6 Manrope,sans-serif;color:#C8C4D0;max-width:72ch">{{ c }}</span></div></sc-for>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<h2 style="margin:0;font:800 19px/1.2 Manrope,sans-serif;letter-spacing:-.025em">Vague 2</h2>
+<sc-for list="{{ next }}" as="c" hint-placeholder-count="5"><div style="display:flex;gap:14px;align-items:flex-start"><span style="flex:none;width:7px;height:7px;margin-top:9px;border-radius:2px;background:#4A3F63"></span><span style="font:500 15px/1.6 Manrope,sans-serif;color:#C8C4D0;max-width:72ch">{{ c }}</span></div></sc-for>
+</section>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const nb = '\u00a0';
+    return {
+      flows: [
+        { n: '01', t: 'Accueil → source → lecteur → retour', how: 'Cliquer « Reprendre la lecture » ou une carte, puis Échap. L’image et le titre font le chemin aller et retour.' },
+        { n: '02', t: 'Surligner un passage', how: 'Sélectionner du texte dans le lecteur, puis 1 à 4 ou un rond de couleur. « Note » ajoute un commentaire, « ? » affiche la légende.' },
+        { n: '03', t: 'Mode suivi', how: 'Touche F ou « Suivre Claude ». Claude ajoute une source, la lit, surligne deux passages et rédige la fiche « Ouvrir l’accès hors de la maison ». Échap arrête le suivi ; Claude continue et une notification groupée résume ses actions.' },
+        { n: '04', t: '⌘K → passage surligné', how: '⌘K ou /, taper « relais » ou « critères », flèches puis Entrée.' },
+        { n: '05', t: 'Capture rapide', how: '⌘⇧Espace, ⌘L ou « Ajouter ». Coller une adresse (https://reseau.example/wireguard-en-pratique) ou écrire une note, puis Entrée.' },
+        { n: '06', t: 'Thème night → clair', how: 'Réglages › Apparence, ou ⌘K « Basculer le thème ».' },
+      ],
+      tokens: [
+        { name: '--hl-yellow / -bg', night: 'rgba(236,196,98,.28)', nightLabel: '#ECC462 28 %', clair: '#FBEBB5', clairLabel: '#FBEBB5', role: 'Passage clé, définition' },
+        { name: '--hl-green / -bg', night: 'rgba(112,196,150,.26)', nightLabel: '#70C496 26 %', clair: '#D6F0E1', clairLabel: '#D6F0E1', role: 'Pour, acquis' },
+        { name: '--hl-red / -bg', night: 'rgba(236,140,126,.28)', nightLabel: '#EC8C7E 28 %', clair: '#FADCD6', clairLabel: '#FADCD6', role: 'Risque, contre' },
+        { name: '--hl-blue / -bg', night: 'rgba(127,174,232,.28)', nightLabel: '#7FAEE8 28 %', clair: '#DCE8F8', clairLabel: '#DCE8F8', role: 'À creuser' },
+        { name: '--color-active-night', night: '#342B4A', nightLabel: '#342B4A', clair: '#F4EDFB', clairLabel: 'brand-100', role: 'Fond actif (cité dans le cahier, absent de tokens.css)' },
+        { name: '--color-success-night', night: '#3FB785', nightLabel: '#3FB785', clair: '#0B7A52', clairLabel: 'success', role: 'Pastille « en ligne » lisible sur night' },
+        { name: '--color-warning-night', night: '#E0A94A', nightLabel: '#E0A94A', clair: '#7A4800', clairLabel: 'warning', role: 'Hors ligne, MCP inactif' },
+        { name: '--color-danger-night', night: '#F08A7E', nightLabel: '#F08A7E', clair: '#B42318', clairLabel: 'danger', role: 'Action destructive sur night' },
+      ],
+      motion: [
+        { what: 'Navigation latérale', props: 'Indicateur actif (fond + filet 3 px) glisse en translateY', dur: '360 ms · amorti', rm: 'Saut immédiat' },
+        { what: 'Changement d’écran', props: 'Conteneur opacity + 10 px ; contenu « rise » opacity + 16 px, cascade 60 ms (10 max)', dur: '360 / 500 ms', rm: 'Fondu 160 ms' },
+        { what: 'Ouvrir une source', props: 'Image et titre partagés (FLIP translate + scale), barre latérale à 50 %, texte en cascade +150 ms ; retour par le chemin inverse', dur: '440 ms · amorti', rm: 'Fondu, pas de déplacement' },
+        { what: 'Barre de surlignage', props: 'scale .86 → 1 + fondu, origine au curseur ; boutons en cascade 22 ms', dur: '200 ms', rm: 'Fondu 100 ms' },
+        { what: 'Surlignage de Chris', props: 'Balayage scaleX par ligne (calques temporaires sous le texte) ; carte du panneau insérée au ressort', dur: '420 ms · 480 ms', rm: 'Apparition 200 ms' },
+        { what: 'Surlignage de Claude', props: 'Même balayage, plus lent, suivi d’une étiquette CLAUDE ; soulignement pointillé permanent', dur: '680 ms', rm: 'Apparition 200 ms' },
+        { what: 'Carte ajoutée par Claude', props: 'translateY −14 px, scale .94 → 1 au ressort ; liseré violet qui s’éteint', dur: '560 ms · 1,9 s', rm: 'Fondu 160 ms' },
+        { what: 'Texte rédigé par Claude', props: 'Frappe progressive avec curseur ; teinte de fond qui s’éteint (opacity)', dur: '24 ms / 3 car. · 1,4 s', rm: 'Texte complet immédiat' },
+        { what: 'Filtrer, trier, changer de vue', props: 'FLIP translate des éléments restants ; entrants scale .97 → 1', dur: '400 ms · 260 ms', rm: 'Fondu 160 ms' },
+        { what: 'Palette ⌘K', props: 'scale .98 → 1 + fondu ; résultats en cascade 18 ms ; sélection glisse ; sortie 140 ms', dur: '220 ms', rm: 'Fondu 120 ms' },
+        { what: 'Capture rapide', props: 'translateY 10 px + scale .98 ; la carte atterrit au ressort, titre en squelette jusqu’à extraction', dur: '200 ms · 480 ms', rm: 'Fondu 120 ms' },
+        { what: 'Chargement', props: 'Squelettes aux dimensions des cartes, balayage lent en translateX', dur: '1,8 s en boucle', rm: 'Squelettes fixes' },
+        { what: 'Hors ligne et reconnexion', props: 'Bandeau calme ; à la reconnexion, sortie translateY −8 px + fondu, puis notification', dur: '200 ms', rm: 'Disparition simple' },
+        { what: 'Lancement', props: 'Tracé du symbole, puis lettres qui sortent du symbole, fondu vers l’app ; une fois par session dans le prototype', dur: '2,48 s + 420 ms', rm: 'Logo fixe 700 ms' },
+        { what: 'Exceptions à corriger', props: 'Survol des cartes (ombre animée), repli de la barre latérale (width), bascule de thème (couleurs). En production : opacité d’un pseudo-élément, rail en translateX, fondu enchaîné d’un instantané.', dur: '—', rm: '—' },
+      ],
+      choices: [
+        'Marque de provenance Claude : astérisque à six branches + « CLAUDE » en mono capitales, sur fond brand-100 / #342B4A. Les surlignages de Claude ajoutent un soulignement pointillé ; ceux de Chris n’ont aucune marque.',
+        'La barre latérale reste night en thème clair, comme le demande le cahier. Le lecteur utilise Manrope 19/1,72 sur 68 caractères, en night-soft pour réduire l’éblouissement.',
+        'Mode suivi : quitter le suivi n’arrête pas Claude. Ses actions continuent d’arriver et sont regroupées dans une seule notification.',
+        'Décisions en colonnes Ouvertes / Tranchées / Abandonnées. « Retenir » dans le tableau des options tranche directement la décision.',
+        'Sous 1240 px de large, le panneau du lecteur se replie derrière un bouton « Surlignages ». Le texte garde sa mesure.',
+      ],
+      open: [
+        'Valider les huit tokens proposés ci-dessus, en particulier les quatre teintes de surlignage.',
+        'Faut-il confirmer avant de trancher une décision, ou « Retenir » suffit-il ?',
+        'Les noms d’outils MCP affichés sur l’écran Claude sont illustratifs : fournir la liste réelle du serveur karakeep.',
+        'Commande équivalente « claude mcp add … » : confirmer le paquet et les variables d’environnement du fork.',
+        'Lancement : le jouer à chaque démarrage à froid, ou seulement après une mise à jour ?',
+      ],
+      next: [
+        'Premier démarrage : adresse du serveur, clé, test animé de la connexion.',
+        'Note en édition : Markdown enrichi, ==surlignage==, schémas Mermaid, images glissées, bannière.',
+        'Planche de composants night + clair avec tous les états (repos, survol, actif, désactivé, focus clavier).',
+        'Vues 960 × 640 dédiées, aide ⌘/, deux pistes d’icône d’app, export React + Tailwind 4 + motion/react.',
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

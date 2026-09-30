@@ -7,8 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "tauri": "tauri",
-    "format": "oxfmt --ignore-path=../../.gitignore --ignore-path=./.gitignore --check .",
-    "format:fix": "oxfmt --ignore-path=../../.gitignore --ignore-path=./.gitignore .",
+    "format": "oxfmt --ignore-path=../../.gitignore --ignore-path=./.gitignore --ignore-path=./.formatignore --check .",
+    "format:fix": "oxfmt --ignore-path=../../.gitignore --ignore-path=./.gitignore --ignore-path=./.formatignore .",
     "lint": "oxlint --ignore-path=../../.gitignore .",
     "lint:fix": "oxlint --ignore-path=../../.gitignore . --fix",
     "typecheck": "tsc --noEmit"

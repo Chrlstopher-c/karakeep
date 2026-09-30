@@ -191,6 +191,9 @@ export const apiKeys = sqliteTable(
     lastUsedAt: integer("lastUsedAt", { mode: "timestamp" }),
     keyId: text("keyId").notNull().unique(),
     keyHash: text("keyHash").notNull(),
+    // Echo fork: set when the key belongs to an AI agent (e.g. "claude");
+    // its mutations are then recorded in agentActivity.
+    agent: text("agent"),
     scopes: text("scopes", { mode: "json" })
       .$type<ZApiKeyScope[]>()
       .notNull()
@@ -372,6 +375,32 @@ export const assets = sqliteTable(
     index("assets_bookmarkId_idx").on(tb.bookmarkId),
     index("assets_assetType_idx").on(tb.assetType),
     index("assets_userId_idx").on(tb.userId),
+  ],
+);
+
+// Echo fork: what an agent API key changed, so clients can show provenance,
+// an activity log and follow the agent live.
+export const agentActivity = sqliteTable(
+  "agentActivity",
+  {
+    id: text("id")
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    agent: text("agent").notNull(),
+    path: text("path").notNull(),
+    bookmarkId: text("bookmarkId"),
+    highlightId: text("highlightId"),
+    listId: text("listId"),
+    detail: text("detail", { mode: "json" }).$type<Record<string, unknown>>(),
+    createdAt: createdAtField(),
+  },
+  (a) => [
+    index("agentActivity_userId_createdAt_idx").on(a.userId, a.createdAt),
+    index("agentActivity_bookmarkId_idx").on(a.bookmarkId),
   ],
 );
 

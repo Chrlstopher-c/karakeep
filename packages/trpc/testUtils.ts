@@ -83,6 +83,7 @@ export async function getApiKeyCallerForPlainKey(db: TestDB, plainKey: string) {
     {
       type: "apiKey",
       keyId: authResult.apiKey.keyId,
+      agent: authResult.apiKey.agent,
       scopes: authResult.apiKey.scopes,
     },
   );
