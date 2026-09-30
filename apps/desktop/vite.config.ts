@@ -10,12 +10,7 @@ import { defineConfig } from "vite";
 // Dev seulement : sert au navigateur la connexion enregistrée par l'app native,
 // pour tester l'interface dans un onglet sans ressaisir la clé. Jamais en build.
 function devConnection(): Plugin {
-  const file = join(
-    homedir(),
-    ".config",
-    "agency.echo.savoir",
-    "connexion.json",
-  );
+  const file = join(homedir(), ".config", "agency.echo.savoir", "connexion.json");
   return {
     name: "savoir-dev-connection",
     apply: "serve",

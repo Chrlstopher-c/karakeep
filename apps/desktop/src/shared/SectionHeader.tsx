@@ -15,9 +15,7 @@ export function SectionHeader({
 }): ReactElement {
   return (
     <div className="flex items-baseline gap-3">
-      <h2 className="text-text m-0 flex-1 text-[19px] font-extrabold leading-[1.2] tracking-[-0.025em]">
-        {title}
-      </h2>
+      <h2 className="text-text m-0 flex-1 text-[19px] font-extrabold leading-[1.2] tracking-[-0.025em]">{title}</h2>
       {action && (
         <button
           type="button"

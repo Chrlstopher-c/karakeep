@@ -1,8 +1,7 @@
 import { createContext, useContext } from "react";
 import type { RefObject } from "react";
 
-export const ScrollContext =
-  createContext<RefObject<HTMLDivElement | null> | null>(null);
+export const ScrollContext = createContext<RefObject<HTMLDivElement | null> | null>(null);
 
 export function useScrollContainer(): RefObject<HTMLDivElement | null> {
   const ref = useContext(ScrollContext);

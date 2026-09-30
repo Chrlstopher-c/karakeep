@@ -84,27 +84,17 @@ function Items({
   );
 }
 
-export function SourcesScreen({
-  onCapture,
-}: {
-  onCapture: () => void;
-}): ReactElement {
+export function SourcesScreen({ onCapture }: { onCapture: () => void }): ReactElement {
   const sources = useSourceBookmarks();
   const provenance = useProvenance();
   const { open } = useOpenBookmark();
   const filters = useSourceFilters(sources.bookmarks, provenance.bookmarkIds);
   const openItem = (item: SourceItem): void => open(item.bookmark.id);
-  const focus = useListKeyboard(filters.items.length, (i) =>
-    openItem(filters.items[i]),
-  );
+  const focus = useListKeyboard(filters.items.length, (i) => openItem(filters.items[i]));
   return (
     <div className="mx-auto flex max-w-[1440px] flex-col gap-[22px] px-10 pb-[120px] pt-9">
       <Rise>
-        <SourcesHeader
-          count={filters.items.length}
-          filters={filters}
-          onCapture={onCapture}
-        />
+        <SourcesHeader count={filters.items.length} filters={filters} onCapture={onCapture} />
       </Rise>
       <Rise index={1}>
         <SourcesFilterBar filters={filters} />
@@ -118,17 +108,13 @@ export function SourcesScreen({
       )}
       {!sources.loading && filters.items.length === 0 && (
         <Rise className="bg-surface flex flex-col items-center gap-4 rounded-[28px] px-6 py-[72px] text-center shadow-ring">
-          <span className="text-soft text-base font-bold leading-[1.4]">
-            Aucune source pour ces filtres.
-          </span>
+          <span className="text-soft text-base font-bold leading-[1.4]">Aucune source pour ces filtres.</span>
           <Button onClick={filters.reset} className="h-10 text-sm">
             Réinitialiser les filtres
           </Button>
         </Rise>
       )}
-      {!sources.loading && (
-        <Items filters={filters} focus={focus} onOpen={openItem} />
-      )}
+      {!sources.loading && <Items filters={filters} focus={focus} onOpen={openItem} />}
     </div>
   );
 }

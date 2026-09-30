@@ -25,12 +25,8 @@ export function SheetSection({
   return (
     <Rise index={index} className="flex flex-col gap-3.5">
       <div className="flex items-center gap-3">
-        <span className="text-accent-ink font-mono text-[12px] leading-none">
-          {n}
-        </span>
-        <h2 className="text-text m-0 flex-1 text-[19px] font-extrabold leading-[1.2] tracking-[-0.025em]">
-          {title}
-        </h2>
+        <span className="text-accent-ink font-mono text-[12px] leading-none">{n}</span>
+        <h2 className="text-text m-0 flex-1 text-[19px] font-extrabold leading-[1.2] tracking-[-0.025em]">{title}</h2>
         {badge}
       </div>
       {children}
@@ -54,27 +50,15 @@ export function Prose({ markdown }: { markdown: string }): ReactElement {
   );
 }
 
-const GRID =
-  "grid grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1fr)_92px] gap-[18px]";
+const GRID = "grid grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1fr)_92px] gap-[18px]";
 
-function Points({
-  items,
-  color,
-}: {
-  items: string[];
-  color: string;
-}): ReactElement {
+function Points({ items, color }: { items: string[]; color: string }): ReactElement {
   return (
     <div className="flex flex-col gap-[7px]">
       {items.map((p) => (
         <div key={p} className="flex items-start gap-[9px]">
-          <span
-            className="mt-[7px] size-[7px] flex-none rounded-full"
-            style={{ background: color }}
-          />
-          <span className="text-soft text-sm font-medium leading-[1.45]">
-            {p}
-          </span>
+          <span className="mt-[7px] size-[7px] flex-none rounded-full" style={{ background: color }} />
+          <span className="text-soft text-sm font-medium leading-[1.45]">{p}</span>
         </div>
       ))}
     </div>
@@ -94,9 +78,7 @@ export function OptionsTable({
 }): ReactElement {
   return (
     <div className="bg-surface overflow-hidden rounded-3xl shadow-ring">
-      <div
-        className={`${GRID} px-5 py-3.5 font-mono text-[11px] leading-none tracking-[0.14em] text-muted`}
-      >
+      <div className={`${GRID} px-5 py-3.5 font-mono text-[11px] leading-none tracking-[0.14em] text-muted`}>
         <span>OPTION</span>
         <span>POUR</span>
         <span>CONTRE</span>
@@ -105,18 +87,11 @@ export function OptionsTable({
       {options.map((o) => {
         const isChosen = !!chosen && chosen.startsWith(o.name);
         return (
-          <div
-            key={o.name}
-            className={`${GRID} border-line border-t px-5 py-[18px] ${isChosen ? "bg-active" : ""}`}
-          >
+          <div key={o.name} className={`${GRID} border-line border-t px-5 py-[18px] ${isChosen ? "bg-active" : ""}`}>
             <div className="flex flex-col gap-2">
-              <span className="text-text text-[15px] font-bold leading-[1.35]">
-                {o.name}
-              </span>
+              <span className="text-text text-[15px] font-bold leading-[1.35]">{o.name}</span>
               {isChosen && (
-                <span className="text-accent-ink font-mono text-[10.5px] leading-none tracking-[0.14em]">
-                  RETENUE
-                </span>
+                <span className="text-accent-ink font-mono text-[10.5px] leading-none tracking-[0.14em]">RETENUE</span>
               )}
             </div>
             <Points items={o.pros} color="var(--hl-green)" />
@@ -139,19 +114,13 @@ export function OptionsTable({
   );
 }
 
-export function LinkedSources({
-  sources,
-}: {
-  sources: SheetSource[];
-}): ReactElement {
+export function LinkedSources({ sources }: { sources: SheetSource[] }): ReactElement {
   const { go } = useNavigation();
   const highlights = useAllHighlights();
   return (
     <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4">
       {sources.map((s) => {
-        const quote = s.bookmarkId
-          ? highlights.byBookmark.get(s.bookmarkId)?.[0]
-          : undefined;
+        const quote = s.bookmarkId ? highlights.byBookmark.get(s.bookmarkId)?.[0] : undefined;
         return (
           <button
             key={s.url}
@@ -189,13 +158,7 @@ export function LinkedSources({
   );
 }
 
-export function Recommendation({
-  text,
-  byClaude,
-}: {
-  text: string;
-  byClaude: boolean;
-}): ReactElement {
+export function Recommendation({ text, byClaude }: { text: string; byClaude: boolean }): ReactElement {
   return (
     <div className="bg-surface-2 relative flex flex-col gap-2.5 rounded-[18px] px-[18px] py-4">
       {byClaude ? (
@@ -203,13 +166,9 @@ export function Recommendation({
           <ClaudeBadge label="PROPOSITION DE CLAUDE" />
         </span>
       ) : (
-        <span className="text-accent-ink font-mono text-[10.5px] tracking-[0.14em]">
-          PROPOSITION
-        </span>
+        <span className="text-accent-ink font-mono text-[10.5px] tracking-[0.14em]">PROPOSITION</span>
       )}
-      <span className="text-text text-base font-medium leading-[1.6]">
-        {text}
-      </span>
+      <span className="text-text text-base font-medium leading-[1.6]">{text}</span>
     </div>
   );
 }

@@ -51,10 +51,7 @@ function splitSections(markdown: string): Section[] {
   return sections.map((s) => ({ ...s, body: s.body.trim() }));
 }
 
-function sectionBody(
-  sections: Section[],
-  key: keyof typeof SECTION_KEYS,
-): string {
+function sectionBody(sections: Section[], key: keyof typeof SECTION_KEYS): string {
   return sections.find((s) => SECTION_KEYS[key].test(s.title))?.body ?? "";
 }
 
@@ -114,22 +111,13 @@ export function parseSheet(markdown: string): Sheet {
 }
 
 // Remplace le corps d'une section en gardant le reste de la note intact.
-export function replaceSection(
-  markdown: string,
-  key: keyof typeof SECTION_KEYS,
-  body: string,
-): string {
+export function replaceSection(markdown: string, key: keyof typeof SECTION_KEYS, body: string): string {
   const lines = markdown.split("\n");
-  const start = lines.findIndex(
-    (l) => /^##\s+/.test(l) && SECTION_KEYS[key].test(l.replace(/^##\s+/, "")),
-  );
-  if (start < 0)
-    return `${markdown.trimEnd()}\n\n## ${key === "decision" ? "Décision" : key}\n${body}\n`;
+  const start = lines.findIndex((l) => /^##\s+/.test(l) && SECTION_KEYS[key].test(l.replace(/^##\s+/, "")));
+  if (start < 0) return `${markdown.trimEnd()}\n\n## ${key === "decision" ? "Décision" : key}\n${body}\n`;
   let end = lines.findIndex((l, i) => i > start && /^##?\s+/.test(l));
   if (end < 0) end = lines.length;
-  return [...lines.slice(0, start + 1), body, "", ...lines.slice(end)].join(
-    "\n",
-  );
+  return [...lines.slice(0, start + 1), body, "", ...lines.slice(end)].join("\n");
 }
 
 export function decisionLine(option: string, date: Date, who: string): string {

@@ -12,16 +12,11 @@ export interface OpenBookmark {
 export function useOpenBookmark(): OpenBookmark {
   const { go } = useNavigation();
   const decisions = useDecisionBookmarks();
-  const ids = useMemo(
-    () => new Set(decisions.bookmarks.map((b) => b.id)),
-    [decisions.bookmarks],
-  );
+  const ids = useMemo(() => new Set(decisions.bookmarks.map((b) => b.id)), [decisions.bookmarks]);
   const isDecision = useCallback((id: string) => ids.has(id), [ids]);
   const open = useCallback(
     (bookmarkId: string, highlightId?: string) =>
-      isDecision(bookmarkId)
-        ? go({ screen: "sheet", bookmarkId })
-        : go({ screen: "reader", bookmarkId, highlightId }),
+      isDecision(bookmarkId) ? go({ screen: "sheet", bookmarkId }) : go({ screen: "reader", bookmarkId, highlightId }),
     [go, isDecision],
   );
   return { isDecision, open };

@@ -9,8 +9,7 @@ function splitText(node: Text): PhrasingContent[] | null {
   let last = 0;
   for (const match of node.value.matchAll(MARK_PATTERN)) {
     const start = match.index ?? 0;
-    if (start > last)
-      parts.push({ type: "text", value: node.value.slice(last, start) });
+    if (start > last) parts.push({ type: "text", value: node.value.slice(last, start) });
     const color = match[1] ?? "yellow";
     parts.push({
       type: "emphasis",
@@ -23,8 +22,7 @@ function splitText(node: Text): PhrasingContent[] | null {
     last = start + match[0].length;
   }
   if (parts.length === 0) return null;
-  if (last < node.value.length)
-    parts.push({ type: "text", value: node.value.slice(last) });
+  if (last < node.value.length) parts.push({ type: "text", value: node.value.slice(last) });
   return parts;
 }
 

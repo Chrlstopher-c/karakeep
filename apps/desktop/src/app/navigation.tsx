@@ -1,21 +1,7 @@
 import type { ReactElement, ReactNode } from "react";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 
-export type ScreenId =
-  | "home"
-  | "decisions"
-  | "sources"
-  | "projects"
-  | "highlights"
-  | "tags"
-  | "claude"
-  | "settings";
+export type ScreenId = "home" | "decisions" | "sources" | "projects" | "highlights" | "tags" | "claude" | "settings";
 
 export type Route =
   | { screen: ScreenId }
@@ -40,11 +26,7 @@ function sameRoute(a: Route, b: Route): boolean {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
-export function NavigationProvider({
-  children,
-}: {
-  children: ReactNode;
-}): ReactElement {
+export function NavigationProvider({ children }: { children: ReactNode }): ReactElement {
   const [history, setHistory] = useState<History>({
     stack: [{ screen: "home" }],
     index: 0,
@@ -57,10 +39,7 @@ export function NavigationProvider({
       return { stack, index: stack.length - 1 };
     });
   }, []);
-  const back = useCallback(
-    () => setHistory((h) => ({ ...h, index: Math.max(0, h.index - 1) })),
-    [],
-  );
+  const back = useCallback(() => setHistory((h) => ({ ...h, index: Math.max(0, h.index - 1) })), []);
   const forward = useCallback(
     () =>
       setHistory((h) => ({
@@ -74,11 +53,7 @@ export function NavigationProvider({
     () => ({ route: history.stack[history.index], go, back, forward }),
     [history, go, back, forward],
   );
-  return (
-    <NavigationContext.Provider value={value}>
-      {children}
-    </NavigationContext.Provider>
-  );
+  return <NavigationContext.Provider value={value}>{children}</NavigationContext.Provider>;
 }
 
 export function useNavigation(): Navigation {

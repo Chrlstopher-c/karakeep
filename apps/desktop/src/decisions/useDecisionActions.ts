@@ -12,95 +12,73 @@ export interface DecisionActions {
   decide: (bookmark: ZBookmark, option: string) => Promise<void>;
   reopen: (bookmark: ZBookmark, previousText: string) => Promise<void>;
   saveText: (bookmarkId: string, text: string) => Promise<void>;
-  createSheet: (
-    title: string,
-    listId: string,
-    project: string | null,
-  ) => Promise<string>;
+  createSheet: (title: string, listId: string, project: string | null) => Promise<string>;
 }
 
 function noteText(bookmark: ZBookmark): string {
   return bookmark.content.type === "text" ? bookmark.content.text : "";
 }
 
-export function useDecisionActions(): DecisionActions {
+interface SheetMutations {
+  setText: (bookmarkId: string, text: string) => Promise<unknown>;
+  setStatus: (bookmark: ZBookmark, status: DecisionStatus) => Promise<unknown>;
+  create: (title: string, listId: string, project: string | null) => Promise<string>;
+  refresh: () => void;
+}
+
+function useSheetMutations(): SheetMutations {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const refresh = (): void =>
-    void queryClient.invalidateQueries(trpc.bookmarks.pathFilter());
-  const onError = (cause: unknown): void =>
-    log.error("fiche de décision", cause);
-  const updateText = useMutation(
-    trpc.bookmarks.updateBookmarkText.mutationOptions({ onError }),
-  );
-  const updateTags = useMutation(
-    trpc.bookmarks.updateTags.mutationOptions({ onError }),
-  );
-  const create = useMutation(
-    trpc.bookmarks.createBookmark.mutationOptions({ onError }),
-  );
-  const update = useMutation(
-    trpc.bookmarks.updateBookmark.mutationOptions({ onError }),
-  );
-  const addToList = useMutation(
-    trpc.lists.addToList.mutationOptions({ onError }),
-  );
-
-  const setStatus = async (
-    bookmark: ZBookmark,
-    status: DecisionStatus,
-  ): Promise<void> => {
-    const detach = bookmark.tags
-      .filter((t) => t.name.startsWith("statut:"))
-      .map((t) => ({ tagId: t.id }));
-    await updateTags.mutateAsync({
-      bookmarkId: bookmark.id,
-      attach: [{ tagName: `statut:${status}` }],
-      detach,
+  const onError = (cause: unknown): void => log.error("fiche de décision", cause);
+  const updateText = useMutation(trpc.bookmarks.updateBookmarkText.mutationOptions({ onError }));
+  const updateTags = useMutation(trpc.bookmarks.updateTags.mutationOptions({ onError }));
+  const createBm = useMutation(trpc.bookmarks.createBookmark.mutationOptions({ onError }));
+  const rename = useMutation(trpc.bookmarks.updateBookmark.mutationOptions({ onError }));
+  const addToList = useMutation(trpc.lists.addToList.mutationOptions({ onError }));
+  const tag = (bookmarkId: string, attach: string[], detachIds: string[] = []): Promise<unknown> =>
+    updateTags.mutateAsync({
+      bookmarkId,
+      attach: attach.map((tagName) => ({ tagName })),
+      detach: detachIds.map((tagId) => ({ tagId })),
     });
-  };
-
   return {
-    decide: async (bookmark, option) => {
-      const text = replaceSection(
-        noteText(bookmark),
-        "decision",
-        decisionLine(option, new Date(), "Chris"),
-      );
-      await updateText.mutateAsync({ bookmarkId: bookmark.id, text });
-      await setStatus(bookmark, "tranchée");
-      refresh();
+    setText: (bookmarkId, text) => updateText.mutateAsync({ bookmarkId, text }),
+    setStatus: (bookmark, status) =>
+      tag(
+        bookmark.id,
+        [`statut:${status}`],
+        bookmark.tags.filter((t) => t.name.startsWith("statut:")).map((t) => t.id),
+      ),
+    create: async (title, listId, project) => {
+      const { id } = await createBm.mutateAsync({ type: BookmarkTypes.TEXT, text: SHEET_TEMPLATE });
+      await rename.mutateAsync({ bookmarkId: id, title });
+      await addToList.mutateAsync({ listId, bookmarkId: id });
+      await tag(id, ["statut:ouverte", ...(project ? [`projet:${project}`] : [])]);
+      return id;
     },
-    reopen: async (bookmark, previousText) => {
-      await updateText.mutateAsync({
-        bookmarkId: bookmark.id,
-        text: previousText,
-      });
-      await setStatus(bookmark, "ouverte");
-      refresh();
+    refresh: () => void queryClient.invalidateQueries(trpc.bookmarks.pathFilter()),
+  };
+}
+
+// Retenir une option réécrit la section Décision et passe la fiche en « tranchée ».
+export function useDecisionActions(): DecisionActions {
+  const m = useSheetMutations();
+  const then = async (work: Promise<unknown>): Promise<void> => {
+    await work;
+    m.refresh();
+  };
+  return {
+    decide: (bookmark, option) => {
+      const text = replaceSection(noteText(bookmark), "decision", decisionLine(option, new Date(), "Chris"));
+      return then(m.setText(bookmark.id, text).then(() => m.setStatus(bookmark, "tranchée")));
     },
-    saveText: async (bookmarkId, text) => {
-      await updateText.mutateAsync({ bookmarkId, text });
-      refresh();
-    },
+    reopen: (bookmark, previousText) =>
+      then(m.setText(bookmark.id, previousText).then(() => m.setStatus(bookmark, "ouverte"))),
+    saveText: (bookmarkId, text) => then(m.setText(bookmarkId, text)),
     createSheet: async (title, listId, project) => {
-      const created = await create.mutateAsync({
-        type: BookmarkTypes.TEXT,
-        text: SHEET_TEMPLATE,
-      });
-      await update.mutateAsync({ bookmarkId: created.id, title });
-      await addToList.mutateAsync({ listId, bookmarkId: created.id });
-      const tags = [
-        { tagName: "statut:ouverte" },
-        ...(project ? [{ tagName: `projet:${project}` }] : []),
-      ];
-      await updateTags.mutateAsync({
-        bookmarkId: created.id,
-        attach: tags,
-        detach: [],
-      });
-      refresh();
-      return created.id;
+      const id = await m.create(title, listId, project);
+      m.refresh();
+      return id;
     },
   };
 }

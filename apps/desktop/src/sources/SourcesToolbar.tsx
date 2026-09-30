@@ -47,17 +47,10 @@ export function SourcesHeader({
         <Eyebrow>LISTES</Eyebrow>
         <h1 className="text-text m-0 flex items-baseline gap-3 text-[28px] font-extrabold leading-[1.15] tracking-[-0.035em]">
           Sources
-          <span className="font-mono text-sm font-medium leading-none tracking-normal text-muted">
-            {count}
-          </span>
+          <span className="font-mono text-sm font-medium leading-none tracking-normal text-muted">{count}</span>
         </h1>
       </div>
-      <Segmented
-        square
-        options={LAYOUTS}
-        value={filters.layout}
-        onChange={filters.setLayout}
-      />
+      <Segmented square options={LAYOUTS} value={filters.layout} onChange={filters.setLayout} />
       <Button variant="primary" onClick={onCapture}>
         <Icon name="plus" size={16} stroke={2.2} />
         Ajouter
@@ -66,25 +59,13 @@ export function SourcesHeader({
   );
 }
 
-export function SourcesFilterBar({
-  filters,
-}: {
-  filters: SourceFilters;
-}): ReactElement {
+export function SourcesFilterBar({ filters }: { filters: SourceFilters }): ReactElement {
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <Segmented
-        options={AUTHORS}
-        value={filters.author}
-        onChange={filters.setAuthor}
-      />
+      <Segmented options={AUTHORS} value={filters.author} onChange={filters.setAuthor} />
       <div className="flex flex-wrap gap-1.5">
         {KINDS.map((k) => (
-          <FilterChip
-            key={k.value}
-            active={filters.kind === k.value}
-            onClick={() => filters.setKind(k.value)}
-          >
+          <FilterChip key={k.value} active={filters.kind === k.value} onClick={() => filters.setKind(k.value)}>
             {k.label}
           </FilterChip>
         ))}
@@ -98,9 +79,7 @@ export function SourcesFilterBar({
         <Icon name="sort" size={15} />
         {filters.sort === "recent" ? "Plus récentes" : "Titre A → Z"}
       </button>
-      <span className="text-subtle font-mono text-[11px] leading-none">
-        J / K · ENTRÉE
-      </span>
+      <span className="text-subtle font-mono text-[11px] leading-none">J / K · ENTRÉE</span>
     </div>
   );
 }

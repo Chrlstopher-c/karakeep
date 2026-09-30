@@ -37,10 +37,7 @@ export function useFollow(items: AgentActivityItem[]): Follow {
     setFollowing(false);
     return items.filter((i) => i.createdAt >= startedAt.current);
   }, [items]);
-  const toggle = useCallback(
-    () => (following ? void stop() : start()),
-    [following, start, stop],
-  );
+  const toggle = useCallback(() => (following ? void stop() : start()), [following, start, stop]);
 
   const status =
     newest && newest.createdAt >= startedAt.current

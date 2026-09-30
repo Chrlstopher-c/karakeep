@@ -19,12 +19,7 @@ const G_TARGETS: Record<string, ScreenId> = {
 
 function isTyping(target: EventTarget | null): boolean {
   const el = target as HTMLElement | null; // cible d'un événement clavier : un élément ou null
-  return (
-    !!el &&
-    (el.tagName === "INPUT" ||
-      el.tagName === "TEXTAREA" ||
-      el.isContentEditable)
-  );
+  return !!el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
 }
 
 // Raccourcis globaux du prototype (⌘K, ⌘L/⌘N, ⌘←/→, ⌘/, G puis D/S/P/H, F, /, Échap).
@@ -43,14 +38,9 @@ export function useShortcuts(handlers: ShortcutHandlers): void {
       if (mod && (k === "l" || k === "n")) return prevent(e, h.openCapture);
       if (mod && e.key === "ArrowLeft") return prevent(e, n.back);
       if (mod && e.key === "ArrowRight") return prevent(e, n.forward);
-      if (mod && e.key === "/")
-        return prevent(e, () => n.go({ screen: "settings" }));
+      if (mod && e.key === "/") return prevent(e, () => n.go({ screen: "settings" }));
       if (e.key === "Escape") {
-        if (
-          !h.escape() &&
-          (n.route.screen === "reader" || n.route.screen === "sheet")
-        )
-          n.back();
+        if (!h.escape() && (n.route.screen === "reader" || n.route.screen === "sheet")) n.back();
         return;
       }
       if (mod || isTyping(e.target)) return;

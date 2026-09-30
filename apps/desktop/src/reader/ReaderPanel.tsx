@@ -15,15 +15,7 @@ import { BookmarkInfo } from "./BookmarkInfo";
 
 type Tab = "hl" | "info";
 
-function HighlightCard({
-  h,
-  byClaude,
-  onGo,
-}: {
-  h: ZHighlight;
-  byClaude: boolean;
-  onGo: () => void;
-}): ReactElement {
+function HighlightCard({ h, byClaude, onGo }: { h: ZHighlight; byClaude: boolean; onGo: () => void }): ReactElement {
   return (
     <motion.button
       type="button"
@@ -36,31 +28,17 @@ function HighlightCard({
       className="bg-surface hover:shadow-lift flex cursor-pointer flex-col gap-[9px] rounded-[18px] border-0 px-4 py-3.5 text-left shadow-ring"
     >
       <span className="text-text text-sm font-medium leading-[1.55]">
-        <span
-          className="rounded-[3px] py-px [box-decoration-break:clone]"
-          style={{ background: tintColor(h.color) }}
-        >
+        <span className="rounded-[3px] py-px [box-decoration-break:clone]" style={{ background: tintColor(h.color) }}>
           {h.text}
         </span>
       </span>
-      {h.note && (
-        <span className="text-[13px] font-medium leading-[1.45] text-muted">
-          {h.note}
-        </span>
-      )}
+      {h.note && <span className="text-[13px] font-medium leading-[1.45] text-muted">{h.note}</span>}
       <span className="flex items-center gap-2 font-mono text-[11px] leading-none text-muted">
-        <span
-          className="size-2 rounded-full"
-          style={{ background: solidColor(h.color) }}
-        />
+        <span className="size-2 rounded-full" style={{ background: solidColor(h.color) }} />
         <span className="flex-1">
           {HIGHLIGHT_META[h.color].label} · {relativeTime(h.createdAt)}
         </span>
-        {byClaude ? (
-          <ClaudeBadge />
-        ) : (
-          <span className="tracking-[0.08em]">CHRIS</span>
-        )}
+        {byClaude ? <ClaudeBadge /> : <span className="tracking-[0.08em]">CHRIS</span>}
       </span>
     </motion.button>
   );
@@ -93,19 +71,12 @@ export function ReaderPanel({
         <>
           <AnimatePresence initial={false}>
             {ordered.map((h) => (
-              <HighlightCard
-                key={h.id}
-                h={h}
-                byClaude={byClaude(h.id)}
-                onGo={() => onGoHighlight(h.id)}
-              />
+              <HighlightCard key={h.id} h={h} byClaude={byClaude(h.id)} onGo={() => onGoHighlight(h.id)} />
             ))}
           </AnimatePresence>
           {highlights.length === 0 && (
             <div className="border-line-strong flex flex-col items-center gap-2.5 rounded-[18px] border-[1.5px] border-dashed px-[18px] py-7 text-center">
-              <span className="text-soft text-sm font-semibold leading-[1.45]">
-                Aucun surlignage.
-              </span>
+              <span className="text-soft text-sm font-semibold leading-[1.45]">Aucun surlignage.</span>
               <span className="font-mono text-[12px] leading-normal text-muted">
                 Sélectionner un passage, puis 1 à 4.
               </span>
@@ -113,9 +84,7 @@ export function ReaderPanel({
           )}
         </>
       )}
-      {tab === "info" && (
-        <BookmarkInfo bookmark={bookmark} tags={plainTags(bookmark)} />
-      )}
+      {tab === "info" && <BookmarkInfo bookmark={bookmark} tags={plainTags(bookmark)} />}
     </aside>
   );
 }

@@ -41,13 +41,9 @@ function shouldPlayFull(): boolean {
 }
 
 // Décidé une fois au chargement (les effets peuvent être rejoués en mode strict).
-const PLAY_FULL =
-  !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
-  shouldPlayFull();
+const PLAY_FULL = !window.matchMedia("(prefers-reduced-motion: reduce)").matches && shouldPlayFull();
 
-function animateLogo(svg: SVGSVGElement): void {
-  const q = (id: string): SVGGraphicsElement | null =>
-    svg.querySelector(`#${id}`);
+function traceSymbol(q: (id: string) => SVGGraphicsElement | null): void {
   const seal = q("seal");
   if (seal) seal.style.opacity = "0";
   for (const [id, delay, duration] of STROKES) {
@@ -62,11 +58,10 @@ function animateLogo(svg: SVGSVGElement): void {
       fill: "forwards",
     });
   }
-  seal?.animate([{ opacity: 0 }, { opacity: 1 }], {
-    duration: 220,
-    delay: 1150,
-    fill: "forwards",
-  });
+  seal?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 220, delay: 1150, fill: "forwards" });
+}
+
+function slideLetters(q: (id: string) => SVGGraphicsElement | null): void {
   LETTER_ORDER.forEach((id, k) => {
     const p = q(id);
     if (!p) return;
@@ -74,14 +69,19 @@ function animateLogo(svg: SVGSVGElement): void {
     const [edge, dir] = EDGES[id];
     const dist = dir > 0 ? edge - box.x + 4 : -(box.x + box.width - edge + 4);
     p.style.transform = `translateX(${dist}px)`;
-    p.animate(
-      [
-        { transform: `translateX(${dist}px)` },
-        { transform: "translateX(0px)" },
-      ],
-      { duration: 720, delay: 1240 + k * 70, easing: DAMP, fill: "forwards" },
-    );
+    p.animate([{ transform: `translateX(${dist}px)` }, { transform: "translateX(0px)" }], {
+      duration: 720,
+      delay: 1240 + k * 70,
+      easing: DAMP,
+      fill: "forwards",
+    });
   });
+}
+
+function animateLogo(svg: SVGSVGElement): void {
+  const q = (id: string): SVGGraphicsElement | null => svg.querySelector(`#${id}`);
+  traceSymbol(q);
+  slideLetters(q);
 }
 
 // Lancement : logo Echo révélé (complet après installation ou mise à jour, bref sinon).
@@ -111,10 +111,7 @@ export function LaunchScreen({ onDone }: { onDone: () => void }): ReactElement {
   }, [onDone]);
 
   return (
-    <div
-      ref={rootRef}
-      className="fixed inset-0 z-50 grid place-items-center bg-[#1E1830]"
-    >
+    <div ref={rootRef} className="fixed inset-0 z-50 grid place-items-center bg-[#1E1830]">
       <div
         ref={logoRef}
         className="w-[min(420px,50vw)] text-white [&_svg]:block [&_svg]:h-auto [&_svg]:w-full"

@@ -8,9 +8,7 @@ import { useNavigation } from "./navigation";
 
 function windowAction(action: "minimize" | "toggleMaximize" | "close"): void {
   const win = getCurrentWindow();
-  win[action]().catch((cause: unknown) =>
-    log.error(`fenêtre : ${action}`, cause),
-  );
+  win[action]().catch((cause: unknown) => log.error(`fenêtre : ${action}`, cause));
 }
 
 const DOTS = [
@@ -37,16 +35,9 @@ function HistoryButton({ dir }: { dir: "back" | "forward" }): ReactElement {
   );
 }
 
-export function Titlebar({
-  onOpenPalette,
-}: {
-  onOpenPalette: () => void;
-}): ReactElement {
+export function Titlebar({ onOpenPalette }: { onOpenPalette: () => void }): ReactElement {
   return (
-    <div
-      data-tauri-drag-region
-      className="border-line flex h-12 flex-none items-center gap-3 border-b pl-5 pr-4"
-    >
+    <div data-tauri-drag-region className="border-line flex h-12 flex-none items-center gap-3 border-b pl-5 pr-4">
       <div className="flex gap-0.5">
         <HistoryButton dir="back" />
         <HistoryButton dir="forward" />
@@ -58,9 +49,7 @@ export function Titlebar({
           className="bg-surface flex h-8 w-full max-w-[420px] cursor-pointer items-center gap-2.5 rounded-[10px] border-0 pl-3 pr-2 text-[13px] font-medium text-muted shadow-ring transition-shadow hover:shadow-[0_0_0_1px_var(--line-strong)]"
         >
           <Icon name="search" size={15} stroke={2} />
-          <span className="flex-1 text-left">
-            Rechercher, ouvrir, lancer une commande
-          </span>
+          <span className="flex-1 text-left">Rechercher, ouvrir, lancer une commande</span>
           <Kbd>⌘K</Kbd>
         </button>
       </div>

@@ -46,8 +46,7 @@ export function useReadingPosition(
   });
   const save = useMutation(
     trpc.bookmarks.updateReadingProgress.mutationOptions({
-      onError: (cause) =>
-        log.warn(`progression non enregistrée : ${cause.message}`),
+      onError: (cause) => log.warn(`progression non enregistrée : ${cause.message}`),
     }),
   );
   const restored = useRef(false);
@@ -57,17 +56,11 @@ export function useReadingPosition(
   useEffect(() => {
     const content = contentRef.current;
     const el = scroll.current;
-    if (!enabled || restored.current || !saved.isFetched || !content || !el)
-      return;
+    if (!enabled || restored.current || !saved.isFetched || !content || !el) return;
     restored.current = true;
     const offset = saved.data?.offset ?? 0;
-    const range =
-      offset > 0 ? rangeForOffsets(content, offset, offset + 1) : null;
-    if (range)
-      el.scrollTop +=
-        range.getBoundingClientRect().top -
-        el.getBoundingClientRect().top -
-        TOP_MARGIN;
+    const range = offset > 0 ? rangeForOffsets(content, offset, offset + 1) : null;
+    if (range) el.scrollTop += range.getBoundingClientRect().top - el.getBoundingClientRect().top - TOP_MARGIN;
   }, [enabled, saved.isFetched, saved.data, contentRef, scroll]);
 
   useEffect(() => {
@@ -81,10 +74,7 @@ export function useReadingPosition(
       timer = setTimeout(() => {
         const content = contentRef.current;
         if (!content) return;
-        const offset = firstVisibleOffset(
-          content,
-          el.getBoundingClientRect().top + TOP_MARGIN,
-        );
+        const offset = firstVisibleOffset(content, el.getBoundingClientRect().top + TOP_MARGIN);
         saveRef.current({
           bookmarkId,
           readingProgressOffset: offset,

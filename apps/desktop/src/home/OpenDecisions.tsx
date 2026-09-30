@@ -14,9 +14,7 @@ import { getBookmarkTitle } from "@karakeep/shared/utils/bookmarkUtils";
 export function OpenDecisions(): ReactElement {
   const { go } = useNavigation();
   const provenance = useProvenance();
-  const open = useDecisionBookmarks().bookmarks.filter(
-    (b) => statusOf(b) === "ouverte",
-  );
+  const open = useDecisionBookmarks().bookmarks.filter((b) => statusOf(b) === "ouverte");
   return (
     <section className="flex flex-col gap-3.5">
       <SectionHeader
@@ -25,9 +23,7 @@ export function OpenDecisions(): ReactElement {
         kbd="G D"
         onAction={() => go({ screen: "decisions" })}
       />
-      {open.length === 0 && (
-        <p className="m-0 text-sm text-muted">Aucune décision en attente.</p>
-      )}
+      {open.length === 0 && <p className="m-0 text-sm text-muted">Aucune décision en attente.</p>}
       {open.map((b) => {
         const project = projectOf(b);
         return (
@@ -38,12 +34,9 @@ export function OpenDecisions(): ReactElement {
             className="bg-surface hover:shadow-lift flex cursor-pointer items-center gap-4 rounded-[18px] border-0 py-4 pl-[22px] pr-[18px] text-left shadow-ring transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5"
           >
             <span className="flex min-w-0 flex-1 flex-col gap-1.5">
-              <span className="text-text text-base font-bold leading-[1.3]">
-                {getBookmarkTitle(b) ?? "Sans titre"}
-              </span>
+              <span className="text-text text-base font-bold leading-[1.3]">{getBookmarkTitle(b) ?? "Sans titre"}</span>
               <span className="font-mono text-[12px] leading-none text-muted">
-                à trancher · modifiée{" "}
-                {relativeTime(b.modifiedAt ?? b.createdAt)}
+                à trancher · modifiée {relativeTime(b.modifiedAt ?? b.createdAt)}
               </span>
             </span>
             {provenance.bookmarkIds.has(b.id) && <ClaudeBadge />}

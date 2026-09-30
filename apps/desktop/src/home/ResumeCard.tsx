@@ -36,12 +36,8 @@ export function ResumeCard(): ReactElement | null {
       />
       <div className="flex min-w-0 flex-1 flex-col gap-2.5 px-7 py-6">
         <Eyebrow>REPRENDRE LA LECTURE</Eyebrow>
-        <div className="text-text text-[26px] font-extrabold leading-[1.15] tracking-[-0.035em]">
-          {source.title}
-        </div>
-        <div className="font-mono text-[12px] leading-none text-muted">
-          {source.domain}
-        </div>
+        <div className="text-text text-[26px] font-extrabold leading-[1.15] tracking-[-0.035em]">{source.title}</div>
+        <div className="font-mono text-[12px] leading-none text-muted">{source.domain}</div>
         <div className="mt-auto flex items-center gap-3.5 pt-3.5">
           <div className="bg-surface-3 h-1.5 flex-1 overflow-hidden rounded-full">
             <div
@@ -49,12 +45,8 @@ export function ResumeCard(): ReactElement | null {
               style={{ transform: `scaleX(${percent / 100})` }}
             />
           </div>
-          <span className="text-soft font-mono text-[12px] leading-none">
-            {percent} %
-          </span>
-          <span className="text-text text-sm font-bold leading-none">
-            Reprendre
-          </span>
+          <span className="text-soft font-mono text-[12px] leading-none">{percent} %</span>
+          <span className="text-text text-sm font-bold leading-none">Reprendre</span>
         </div>
       </div>
     </button>

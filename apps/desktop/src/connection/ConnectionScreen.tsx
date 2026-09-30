@@ -11,11 +11,7 @@ const FIELD =
   "h-11 w-full rounded-xl border border-line bg-field px-3.5 text-text " +
   "placeholder:text-muted focus:border-accent focus:outline-none";
 
-export function ConnectionScreen({
-  onConnect,
-}: {
-  onConnect: (c: Connection) => Promise<void>;
-}): ReactElement {
+export function ConnectionScreen({ onConnect }: { onConnect: (c: Connection) => Promise<void> }): ReactElement {
   const form = useConnectForm(onConnect);
   return (
     <motion.main
@@ -31,12 +27,8 @@ export function ConnectionScreen({
       >
         <img src={symbolUrl} alt="" className="h-10 w-10" />
         <div className="grid gap-1.5">
-          <h1 className="text-text m-0 text-3xl font-extrabold tracking-tight">
-            Connexion à Savoir
-          </h1>
-          <p className="m-0 text-sm">
-            Adresse du serveur Karakeep et clé API (Réglages → Clés API).
-          </p>
+          <h1 className="text-text m-0 text-3xl font-extrabold tracking-tight">Connexion à Savoir</h1>
+          <p className="m-0 text-sm">Adresse du serveur Karakeep et clé API (Réglages → Clés API).</p>
         </div>
         <input
           className={FIELD}

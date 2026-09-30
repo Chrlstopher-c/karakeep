@@ -6,10 +6,7 @@ import type { ZBookmark } from "@karakeep/shared/types/bookmarks";
 import { getBookmarkTitle } from "@karakeep/shared/utils/bookmarkUtils";
 
 import { projectOf, statusOf } from "../knowledge/conventions";
-import {
-  useAllBookmarks,
-  useDecisionBookmarks,
-} from "../knowledge/useBookmarks";
+import { useAllBookmarks, useDecisionBookmarks } from "../knowledge/useBookmarks";
 import { useOpenBookmark } from "../knowledge/useOpenBookmark";
 import { Eyebrow } from "../shared/Eyebrow";
 import { Icon } from "../shared/Icon";
@@ -52,19 +49,13 @@ function ProjectCard({ project }: { project: Project }): ReactElement {
         className="flex cursor-pointer items-start gap-3 border-0 bg-transparent p-0 text-left"
       >
         <span className="flex flex-1 flex-col gap-2">
-          <span className="text-text text-[22px] font-extrabold leading-[1.15] tracking-[-0.03em]">
-            {project.name}
-          </span>
+          <span className="text-text text-[22px] font-extrabold leading-[1.15] tracking-[-0.03em]">{project.name}</span>
           <span className="font-mono text-[12px] text-muted">
-            {project.decisions} décision{project.decisions > 1 ? "s" : ""} ·{" "}
-            {project.open} ouverte{project.open > 1 ? "s" : ""} · {sources}{" "}
-            source{sources > 1 ? "s" : ""}
+            {project.decisions} décision{project.decisions > 1 ? "s" : ""} · {project.open} ouverte
+            {project.open > 1 ? "s" : ""} · {sources} source{sources > 1 ? "s" : ""}
           </span>
         </span>
-        <motion.span
-          animate={{ rotate: expanded ? 180 : 0 }}
-          className="text-muted"
-        >
+        <motion.span animate={{ rotate: expanded ? 180 : 0 }} className="text-muted">
           <Icon name="chevronDown" size={16} stroke={2} />
         </motion.span>
       </button>
@@ -97,31 +88,22 @@ function ProjectCard({ project }: { project: Project }): ReactElement {
 export function ProjectsScreen(): ReactElement {
   const all = useAllBookmarks();
   const decisions = useDecisionBookmarks();
-  const projects = groupProjects(
-    all.bookmarks,
-    new Set(decisions.bookmarks.map((b) => b.id)),
-  );
+  const projects = groupProjects(all.bookmarks, new Set(decisions.bookmarks.map((b) => b.id)));
   return (
     <div className="mx-auto flex max-w-[1320px] flex-col gap-6 px-10 pb-20 pt-9">
       <Rise className="flex flex-col gap-3">
         <Eyebrow>LISTES</Eyebrow>
-        <h1 className="text-text m-0 text-[28px] font-extrabold leading-[1.15] tracking-[-0.035em]">
-          Projets
-        </h1>
+        <h1 className="text-text m-0 text-[28px] font-extrabold leading-[1.15] tracking-[-0.035em]">Projets</h1>
       </Rise>
       {!all.loading && projects.length === 0 && (
         <Rise
           index={1}
           className="border-line-strong rounded-3xl border-[1.5px] border-dashed px-6 py-10 text-center text-sm text-muted"
         >
-          Aucun projet. Un projet apparaît dès qu’un élément porte le tag
-          projet:&lt;nom&gt;.
+          Aucun projet. Un projet apparaît dès qu’un élément porte le tag projet:&lt;nom&gt;.
         </Rise>
       )}
-      <Rise
-        index={1}
-        className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] items-start gap-5"
-      >
+      <Rise index={1} className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] items-start gap-5">
         {projects.map((p) => (
           <ProjectCard key={p.name} project={p} />
         ))}

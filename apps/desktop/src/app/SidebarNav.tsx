@@ -48,9 +48,7 @@ const GROUPS: { label?: string; items: NavItem[] }[] = [
     ],
   },
   {
-    items: [
-      { id: "claude", label: "Claude", tip: "Claude et journal d'activité" },
-    ],
+    items: [{ id: "claude", label: "Claude", tip: "Claude et journal d'activité" }],
   },
 ];
 
@@ -87,9 +85,7 @@ export function NavButton({
       <span className="relative flex items-center">
         <Icon name={item.id as IconName} />
       </span>
-      {!collapsed && (
-        <span className="relative flex-1 whitespace-nowrap">{item.label}</span>
-      )}
+      {!collapsed && <span className="relative flex-1 whitespace-nowrap">{item.label}</span>}
       {!collapsed && count !== undefined && (
         <span className="relative rounded-full bg-[#2E2644] px-[7px] py-1 font-mono text-[11px] leading-none text-[#A39DB5]">
           {count}

@@ -34,27 +34,16 @@ function offsetOf(root: HTMLElement, target: Node, inner: number): number {
 }
 
 // Un point de sélection peut tomber sur un élément : on le ramène au texte le plus proche.
-function toTextPoint(
-  root: HTMLElement,
-  node: Node,
-  offset: number,
-): { node: Node; offset: number } {
+function toTextPoint(root: HTMLElement, node: Node, offset: number): { node: Node; offset: number } {
   if (node.nodeType === Node.TEXT_NODE) return { node, offset };
   const child = node.childNodes[offset] ?? null;
   const walker = textWalker(root);
   walker.currentNode = child ?? node;
-  const next = child
-    ? child.nodeType === Node.TEXT_NODE
-      ? child
-      : walker.nextNode()
-    : walker.nextNode();
+  const next = child ? (child.nodeType === Node.TEXT_NODE ? child : walker.nextNode()) : walker.nextNode();
   return next ? { node: next, offset: 0 } : { node, offset: 0 };
 }
 
-export function offsetsFromRange(
-  root: HTMLElement,
-  range: Range,
-): { start: number; end: number; text: string } | null {
+export function offsetsFromRange(root: HTMLElement, range: Range): { start: number; end: number; text: string } | null {
   if (!root.contains(range.commonAncestorContainer)) return null;
   const a = toTextPoint(root, range.startContainer, range.startOffset);
   const b = toTextPoint(root, range.endContainer, range.endOffset);
@@ -83,11 +72,7 @@ function slicesFor(root: HTMLElement, start: number, end: number): TextSlice[] {
   return slices;
 }
 
-export function rangeForOffsets(
-  root: HTMLElement,
-  start: number,
-  end: number,
-): Range | null {
+export function rangeForOffsets(root: HTMLElement, start: number, end: number): Range | null {
   const slices = slicesFor(root, start, end);
   if (slices.length === 0) return null;
   const range = document.createRange();
@@ -106,16 +91,11 @@ export function clearHighlights(root: HTMLElement): void {
   root.normalize();
 }
 
-function wrapSlice(
-  slice: TextSlice,
-  h: PaintedHighlight,
-  hidden: boolean,
-): void {
+function wrapSlice(slice: TextSlice, h: PaintedHighlight, hidden: boolean): void {
   if (slice.end <= slice.start || !slice.node.parentNode) return;
   let node = slice.node;
   if (slice.start > 0) node = node.splitText(slice.start);
-  if (slice.end - slice.start < node.length)
-    node.splitText(slice.end - slice.start);
+  if (slice.end - slice.start < node.length) node.splitText(slice.end - slice.start);
   const mark = document.createElement("mark");
   mark.setAttribute(MARK_ATTR, h.id);
   mark.className = `sv-hl${h.byClaude ? " sv-hl-claude" : ""}${hidden ? " sv-hl-pending" : ""}`;
@@ -126,23 +106,14 @@ function wrapSlice(
 }
 
 // Repeint tous les surlignages ; ceux de `pending` restent transparents le temps du balayage.
-export function paintHighlights(
-  root: HTMLElement,
-  highlights: PaintedHighlight[],
-  pending: Set<string>,
-): void {
+export function paintHighlights(root: HTMLElement, highlights: PaintedHighlight[], pending: Set<string>): void {
   clearHighlights(root);
   const ordered = [...highlights].sort((a, b) => b.startOffset - a.startOffset);
   for (const h of ordered) {
-    for (const slice of slicesFor(root, h.startOffset, h.endOffset).reverse())
-      wrapSlice(slice, h, pending.has(h.id));
+    for (const slice of slicesFor(root, h.startOffset, h.endOffset).reverse()) wrapSlice(slice, h, pending.has(h.id));
   }
 }
 
 export function markElements(root: HTMLElement, id: string): HTMLElement[] {
-  return Array.from(
-    root.querySelectorAll<HTMLElement>(
-      `mark[${MARK_ATTR}="${CSS.escape(id)}"]`,
-    ),
-  );
+  return Array.from(root.querySelectorAll<HTMLElement>(`mark[${MARK_ATTR}="${CSS.escape(id)}"]`));
 }

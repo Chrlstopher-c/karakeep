@@ -11,13 +11,7 @@ import { TagChip } from "../shared/TagChip";
 import { shortDate } from "../shared/time";
 import { KIND_LABEL, toSourceView } from "../sources/sourceView";
 
-export function ReaderHeader({
-  bookmark,
-  byClaude,
-}: {
-  bookmark: ZBookmark;
-  byClaude: boolean;
-}): ReactElement {
+export function ReaderHeader({ bookmark, byClaude }: { bookmark: ZBookmark; byClaude: boolean }): ReactElement {
   const view = toSourceView(bookmark);
   const hasMedia = view.imageUrl || view.imageAssetId;
   return (
@@ -28,10 +22,7 @@ export function ReaderHeader({
       <h1 className="text-text m-0 text-balance text-[40px] font-extrabold leading-[1.1] tracking-[-0.04em]">
         {view.title}
       </h1>
-      <Rise
-        index={1}
-        className="flex flex-wrap items-center gap-3 font-mono text-[12px] leading-none text-muted"
-      >
+      <Rise index={1} className="flex flex-wrap items-center gap-3 font-mono text-[12px] leading-none text-muted">
         <span>ajouté le {shortDate(bookmark.createdAt)}</span>
         {byClaude && <ClaudeBadge label="AJOUTÉ PAR CLAUDE" />}
         {plainTags(bookmark).map((t) => (
@@ -39,12 +30,7 @@ export function ReaderHeader({
         ))}
       </Rise>
       {hasMedia && view.kind !== "image" && (
-        <Media
-          imageUrl={view.imageUrl}
-          assetId={view.imageAssetId}
-          label=""
-          className="mt-2.5 h-[300px] rounded-3xl"
-        />
+        <Media imageUrl={view.imageUrl} assetId={view.imageAssetId} label="" className="mt-2.5 h-[300px] rounded-3xl" />
       )}
     </header>
   );

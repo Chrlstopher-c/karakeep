@@ -45,10 +45,7 @@ export function useSweeps(
     }));
     next.filter((s) => s.rects.length === 0).forEach((s) => onDone(s.id));
     const drawn = next.filter((s) => s.rects.length > 0);
-    setSweeps((current) => [
-      ...current.filter((s) => !drawn.some((n) => n.id === s.id)),
-      ...drawn,
-    ]);
+    setSweeps((current) => [...current.filter((s) => !drawn.some((n) => n.id === s.id)), ...drawn]);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- relancé seulement quand la liste des passages frais change
   }, [container, content, freshKey]);
 

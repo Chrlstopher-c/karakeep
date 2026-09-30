@@ -27,12 +27,8 @@ export function FollowBanner({
           <span className="absolute inset-0 animate-[sv-ping_1.4s_cubic-bezier(.2,.7,.2,1)_infinite] rounded-full border-[1.5px] border-accent" />
         )}
       </span>
-      <span className="text-accent-ink font-mono text-[12px] leading-none tracking-[0.14em]">
-        SUIVI DE CLAUDE
-      </span>
-      <span className="text-text min-w-0 flex-1 truncate text-sm font-semibold leading-[1.3]">
-        {status}
-      </span>
+      <span className="text-accent-ink font-mono text-[12px] leading-none tracking-[0.14em]">SUIVI DE CLAUDE</span>
+      <span className="text-text min-w-0 flex-1 truncate text-sm font-semibold leading-[1.3]">{status}</span>
       <button
         type="button"
         onClick={onStop}

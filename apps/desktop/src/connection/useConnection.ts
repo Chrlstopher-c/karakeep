@@ -1,11 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import type { Connection } from "./connection-store";
-import {
-  forgetConnection,
-  loadConnection,
-  saveConnection,
-} from "./connection-store";
+import { forgetConnection, loadConnection, saveConnection } from "./connection-store";
 
 export type ConnectionState =
   | { status: "loading" }
@@ -24,10 +20,7 @@ export function useConnection(): UseConnection {
   useEffect(() => {
     let cancelled = false;
     void loadConnection().then((connection) => {
-      if (!cancelled)
-        setState(
-          connection ? { status: "ready", connection } : { status: "missing" },
-        );
+      if (!cancelled) setState(connection ? { status: "ready", connection } : { status: "missing" });
     });
     return () => {
       cancelled = true;

@@ -6,16 +6,9 @@ export function Shimmer(): ReactElement {
   );
 }
 
-export function CardSkeleton({
-  height = 300,
-}: {
-  height?: number;
-}): ReactElement {
+export function CardSkeleton({ height = 300 }: { height?: number }): ReactElement {
   return (
-    <div
-      className="bg-surface relative overflow-hidden rounded-3xl shadow-ring"
-      style={{ height }}
-    >
+    <div className="bg-surface relative overflow-hidden rounded-3xl shadow-ring" style={{ height }}>
       <div className="bg-surface-2 h-[148px]" />
       <div className="flex flex-col gap-2.5 px-5 py-4">
         <div className="bg-surface-2 h-2.5 w-2/5 rounded-[5px]" />

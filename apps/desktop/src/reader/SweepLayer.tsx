@@ -7,13 +7,7 @@ import type { Sweep } from "./useSweeps";
 const CHRIS_MS = 0.42;
 const CLAUDE_MS = 0.68;
 
-export function SweepLayer({
-  sweeps,
-  onFinish,
-}: {
-  sweeps: Sweep[];
-  onFinish: (id: string) => void;
-}): ReactElement {
+export function SweepLayer({ sweeps, onFinish }: { sweeps: Sweep[]; onFinish: (id: string) => void }): ReactElement {
   return (
     <div className="pointer-events-none absolute inset-0 z-0">
       {sweeps.map((sweep) => {
@@ -37,11 +31,7 @@ export function SweepLayer({
               delay: i * perLine,
               ease: EASE_SWEEP,
             }}
-            onAnimationComplete={
-              i === sweep.rects.length - 1
-                ? () => onFinish(sweep.id)
-                : undefined
-            }
+            onAnimationComplete={i === sweep.rects.length - 1 ? () => onFinish(sweep.id) : undefined}
           />
         ));
       })}

@@ -48,8 +48,7 @@ export function useAgentActivity(): AgentActivity {
   }, [newestId, queryClient]);
 
   const lastAt = items[0]?.createdAt ?? null;
-  const busy =
-    lastAt !== null && Date.now() - lastAt.getTime() < BUSY_WINDOW_MS;
+  const busy = lastAt !== null && Date.now() - lastAt.getTime() < BUSY_WINDOW_MS;
   return { items, busy, lastAt };
 }
 

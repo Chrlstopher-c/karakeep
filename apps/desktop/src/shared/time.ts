@@ -35,11 +35,7 @@ export function clockTime(date: Date): string {
 }
 
 export function dayLabel(date: Date, now = new Date()): string {
-  const start = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-  ).getTime();
+  const start = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
   const t = date.getTime();
   if (t >= start) return "AUJOURD'HUI";
   if (t >= start - DAY) return "HIER";

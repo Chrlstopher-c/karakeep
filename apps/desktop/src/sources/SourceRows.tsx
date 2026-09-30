@@ -34,12 +34,7 @@ export function ListHeader(): ReactElement {
   );
 }
 
-export function SourceRow({
-  item,
-  highlights,
-  focused,
-  onOpen,
-}: RowProps): ReactElement {
+export function SourceRow({ item, highlights, focused, onOpen }: RowProps): ReactElement {
   const { view } = item;
   return (
     <button
@@ -47,16 +42,9 @@ export function SourceRow({
       onClick={onOpen}
       className={`grid h-[76px] w-full cursor-pointer ${LIST_COLUMNS} hover:bg-surface items-center gap-4 rounded-2xl border-0 px-4 text-left transition-colors ${focused ? "bg-surface outline-2 -outline-offset-2 outline-accent" : "bg-transparent"}`}
     >
-      <Media
-        imageUrl={view.imageUrl}
-        assetId={view.imageAssetId}
-        label=""
-        className="h-14 w-[88px] rounded-[10px]"
-      />
+      <Media imageUrl={view.imageUrl} assetId={view.imageAssetId} label="" className="h-14 w-[88px] rounded-[10px]" />
       <span className="flex min-w-0 flex-col gap-1.5">
-        <span className="text-text truncate text-[15px] font-bold leading-[1.25]">
-          {view.title}
-        </span>
+        <span className="text-text truncate text-[15px] font-bold leading-[1.25]">{view.title}</span>
         <span className="flex items-center gap-2.5 font-mono text-[12px] leading-none text-muted">
           {view.domain} · {KIND_LABEL[view.kind]}
           {item.byClaude && (
@@ -73,18 +61,12 @@ export function SourceRow({
         ))}
       </span>
       <HighlightDots highlights={highlights} showCount />
-      <span className="font-mono text-[12px] leading-none text-muted">
-        {shortDate(view.createdAt)}
-      </span>
+      <span className="font-mono text-[12px] leading-none text-muted">{shortDate(view.createdAt)}</span>
     </button>
   );
 }
 
-export function SourceCompactRow({
-  item,
-  focused,
-  onOpen,
-}: RowProps): ReactElement {
+export function SourceCompactRow({ item, focused, onOpen }: RowProps): ReactElement {
   const { view } = item;
   return (
     <button
@@ -96,21 +78,15 @@ export function SourceCompactRow({
         {KIND_LABEL[view.kind]}
       </span>
       <span className="flex min-w-0 items-center gap-2">
-        <span className="text-text truncate text-sm font-semibold leading-none">
-          {view.title}
-        </span>
+        <span className="text-text truncate text-sm font-semibold leading-none">{view.title}</span>
         {item.byClaude && (
           <span className="text-accent-ink">
             <ClaudeMark />
           </span>
         )}
       </span>
-      <span className="truncate font-mono text-[12px] leading-none text-muted">
-        {view.domain}
-      </span>
-      <span className="text-right font-mono text-[12px] leading-none text-muted">
-        {shortDate(view.createdAt)}
-      </span>
+      <span className="truncate font-mono text-[12px] leading-none text-muted">{view.domain}</span>
+      <span className="text-right font-mono text-[12px] leading-none text-muted">{shortDate(view.createdAt)}</span>
     </button>
   );
 }

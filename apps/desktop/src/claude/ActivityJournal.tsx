@@ -8,9 +8,7 @@ import { clockTime, dayLabel } from "../shared/time";
 import { activityTarget, activityVerb } from "./describeActivity";
 import type { AgentActivityItem } from "./useAgentActivity";
 
-function groupByDay(
-  items: AgentActivityItem[],
-): { day: string; items: AgentActivityItem[] }[] {
+function groupByDay(items: AgentActivityItem[]): { day: string; items: AgentActivityItem[] }[] {
   const groups: { day: string; items: AgentActivityItem[] }[] = [];
   for (const item of items) {
     const day = dayLabel(item.createdAt);
@@ -47,9 +45,7 @@ export function ActivityJournal({
         </button>
       </div>
       {items.length === 0 && (
-        <p className="m-0 px-2.5 py-2 text-sm text-muted">
-          Aucune action de Claude pour l’instant.
-        </p>
+        <p className="m-0 px-2.5 py-2 text-sm text-muted">Aucune action de Claude pour l’instant.</p>
       )}
       {groupByDay(items).map((g) => (
         <div key={g.day} className="flex flex-col gap-1">
@@ -65,19 +61,14 @@ export function ActivityJournal({
                 initial={{ opacity: 0, y: -14, scale: 0.94 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.56, ease: EASE_SPRING }}
-                onClick={() =>
-                  a.bookmarkId && open(a.bookmarkId, a.highlightId ?? undefined)
-                }
+                onClick={() => a.bookmarkId && open(a.bookmarkId, a.highlightId ?? undefined)}
                 className="text-soft hover:bg-surface-2 flex cursor-pointer items-start gap-3.5 rounded-[14px] border-0 bg-transparent p-2.5 text-left"
               >
                 <span className="w-11 flex-none pt-0.5 font-mono text-[12px] leading-[1.4] text-muted">
                   {clockTime(a.createdAt)}
                 </span>
                 <span className="min-w-0 flex-1 text-sm font-medium leading-[1.45]">
-                  {activityVerb(a)}{" "}
-                  <span className="text-text font-bold">
-                    {activityTarget(a)}
-                  </span>
+                  {activityVerb(a)} <span className="text-text font-bold">{activityTarget(a)}</span>
                 </span>
               </motion.button>
             ))}

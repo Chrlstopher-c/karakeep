@@ -60,9 +60,7 @@ export function usePaletteResults(
     title: getBookmarkTitle(b) ?? "Sans titre",
     run: () => open(b.id),
   }));
-  const hlItems: PaletteItem[] = (
-    enabled ? (highlights.data?.highlights ?? []) : []
-  ).map((h) => ({
+  const hlItems: PaletteItem[] = (enabled ? (highlights.data?.highlights ?? []) : []).map((h) => ({
     key: `h-${h.id}`,
     kind: "SURLIGNÉ",
     title: h.text ?? "",

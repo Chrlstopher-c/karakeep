@@ -28,10 +28,7 @@ export interface SourceFilters {
   items: SourceItem[];
 }
 
-export function useSourceFilters(
-  bookmarks: ZBookmark[],
-  claudeIds: Set<string>,
-): SourceFilters {
+export function useSourceFilters(bookmarks: ZBookmark[], claudeIds: Set<string>): SourceFilters {
   const [author, setAuthor] = useState<Author>("all");
   const [kind, setKind] = useState<SourceKind | "all">("all");
   const [sort, setSort] = useState<SortOrder>("recent");
@@ -43,13 +40,9 @@ export function useSourceFilters(
       view: toSourceView(b),
       byClaude: claudeIds.has(b.id),
     }));
-    if (author !== "all")
-      list = list.filter((i) => i.byClaude === (author === "claude"));
+    if (author !== "all") list = list.filter((i) => i.byClaude === (author === "claude"));
     if (kind !== "all") list = list.filter((i) => i.view.kind === kind);
-    if (sort === "title")
-      list = [...list].sort((a, b) =>
-        a.view.title.localeCompare(b.view.title, "fr"),
-      );
+    if (sort === "title") list = [...list].sort((a, b) => a.view.title.localeCompare(b.view.title, "fr"));
     return list;
   }, [bookmarks, claudeIds, author, kind, sort]);
 

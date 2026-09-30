@@ -19,10 +19,7 @@ export function useToasts(): {
 } {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const next = useRef(0);
-  const dismiss = useCallback(
-    (id: number) => setToasts((t) => t.filter((x) => x.id !== id)),
-    [],
-  );
+  const dismiss = useCallback((id: number) => setToasts((t) => t.filter((x) => x.id !== id)), []);
   const notify = useCallback(
     (text: string, action?: Toast["action"]) => {
       next.current += 1;
@@ -35,13 +32,7 @@ export function useToasts(): {
   return { toasts, notify, dismiss };
 }
 
-export function Toasts({
-  toasts,
-  dismiss,
-}: {
-  toasts: Toast[];
-  dismiss: (id: number) => void;
-}): ReactElement {
+export function Toasts({ toasts, dismiss }: { toasts: Toast[]; dismiss: (id: number) => void }): ReactElement {
   return (
     <div className="pointer-events-none absolute bottom-5 right-5 z-[7] flex flex-col items-end gap-2.5">
       <AnimatePresence>
@@ -57,9 +48,7 @@ export function Toasts({
             className="bg-pop shadow-menu pointer-events-auto flex max-w-[420px] items-center gap-3 rounded-[18px] py-3 pl-4 pr-3"
           >
             <span className="size-2 flex-none rounded-full bg-accent" />
-            <span className="text-text flex-1 text-sm font-semibold leading-[1.4]">
-              {t.text}
-            </span>
+            <span className="text-text flex-1 text-sm font-semibold leading-[1.4]">{t.text}</span>
             {t.action && (
               <button
                 type="button"

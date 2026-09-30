@@ -45,8 +45,7 @@ export async function loadConnection(): Promise<Connection | null> {
 }
 
 export async function saveConnection(connection: Connection): Promise<void> {
-  if (BROWSER_DEV)
-    return localStorage.setItem(DEV_KEY, JSON.stringify(connection));
+  if (BROWSER_DEV) return localStorage.setItem(DEV_KEY, JSON.stringify(connection));
   await invoke("save_connection", { connection });
 }
 
@@ -56,16 +55,13 @@ export async function forgetConnection(): Promise<void> {
 }
 
 // Vérifie l'adresse et la clé avant de les enregistrer (API REST : GET /api/v1/users/me).
-export async function checkConnection(
-  connection: Connection,
-): Promise<string | null> {
+export async function checkConnection(connection: Connection): Promise<string | null> {
   try {
     const res = await fetch(`${connection.address}/api/v1/users/me`, {
       headers: { Authorization: `Bearer ${connection.apiKey}` },
       signal: AbortSignal.timeout(8_000),
     });
-    if (res.status === 401 || res.status === 403)
-      return "Clé API refusée par le serveur.";
+    if (res.status === 401 || res.status === 403) return "Clé API refusée par le serveur.";
     if (!res.ok) return `Le serveur répond ${res.status}.`;
     return null;
   } catch (cause) {

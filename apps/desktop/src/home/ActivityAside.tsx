@@ -8,18 +8,10 @@ import { clockTime, relativeTime } from "../shared/time";
 
 const SHOWN = 6;
 
-export function ActivityAside({
-  activity,
-}: {
-  activity: AgentActivity;
-}): ReactElement {
+export function ActivityAside({ activity }: { activity: AgentActivity }): ReactElement {
   const { go } = useNavigation();
   const { open } = useOpenBookmark();
-  const status = activity.busy
-    ? "au travail…"
-    : activity.lastAt
-      ? `au repos · ${relativeTime(activity.lastAt)}`
-      : "";
+  const status = activity.busy ? "au travail…" : activity.lastAt ? `au repos · ${relativeTime(activity.lastAt)}` : "";
   return (
     <aside className="bg-surface flex min-w-0 max-w-[440px] flex-[1_1_300px] flex-col gap-1 rounded-[28px] px-3.5 pb-3.5 pt-[22px] shadow-ring">
       <div className="flex items-center gap-3 px-2.5 pb-3">
@@ -32,31 +24,23 @@ export function ActivityAside({
         <h2 className="text-text m-0 flex-1 text-[19px] font-extrabold leading-[1.2] tracking-[-0.025em]">
           Activité de Claude
         </h2>
-        <span className="font-mono text-[11px] leading-none text-muted">
-          {status}
-        </span>
+        <span className="font-mono text-[11px] leading-none text-muted">{status}</span>
       </div>
       {activity.items.length === 0 && (
-        <p className="m-0 px-2.5 pb-2 text-sm text-muted">
-          Claude n’a encore rien fait dans la base.
-        </p>
+        <p className="m-0 px-2.5 pb-2 text-sm text-muted">Claude n’a encore rien fait dans la base.</p>
       )}
       {activity.items.slice(0, SHOWN).map((item) => (
         <button
           key={item.id}
           type="button"
-          onClick={() =>
-            item.bookmarkId &&
-            open(item.bookmarkId, item.highlightId ?? undefined)
-          }
+          onClick={() => item.bookmarkId && open(item.bookmarkId, item.highlightId ?? undefined)}
           className="text-soft hover:bg-surface-2 flex cursor-pointer items-start gap-3.5 rounded-[14px] border-0 bg-transparent p-2.5 text-left"
         >
           <span className="w-11 flex-none pt-0.5 font-mono text-[12px] leading-[1.4] text-muted">
             {clockTime(item.createdAt)}
           </span>
           <span className="min-w-0 flex-1 text-pretty text-sm font-medium leading-[1.45]">
-            {activityVerb(item)}{" "}
-            <span className="text-text font-bold">{activityTarget(item)}</span>
+            {activityVerb(item)} <span className="text-text font-bold">{activityTarget(item)}</span>
           </span>
         </button>
       ))}

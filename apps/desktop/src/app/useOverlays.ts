@@ -17,47 +17,44 @@ export interface Overlays {
   escape: () => boolean;
 }
 
-// Palette, capture et suivi : ce qu'Échap ferme, dans l'ordre du prototype.
-export function useOverlays(
-  follow: Follow,
-  notify: (text: string, action?: Toast["action"]) => void,
-): Overlays {
+// Arrêter le suivi n'arrête pas Claude : on résume ce qu'il a fait pendant ce temps.
+function useStopFollow(follow: Follow, notify: (text: string, action?: Toast["action"]) => void): () => void {
   const { go } = useNavigation();
+  return useCallback(() => {
+    const done = follow.stop();
+    if (done.length === 0) return;
+    notify(`Pendant le suivi, Claude : ${summarize(done)}.`, { label: "Voir", run: () => go({ screen: "claude" }) });
+  }, [follow, notify, go]);
+}
+
+// Palette, capture et suivi : ce qu'Échap ferme, dans l'ordre du prototype.
+export function useOverlays(follow: Follow, notify: (text: string, action?: Toast["action"]) => void): Overlays {
   const [palette, setPalette] = useState(false);
   const [capture, setCapture] = useState(false);
-
-  const stopFollow = useCallback(() => {
-    const done = follow.stop();
-    if (done.length > 0) {
-      notify(`Pendant le suivi, Claude : ${summarize(done)}.`, {
-        label: "Voir",
-        run: () => go({ screen: "claude" }),
-      });
-    }
-  }, [follow, notify, go]);
-
+  const stopFollow = useStopFollow(follow, notify);
+  const openPalette = useCallback(() => {
+    setCapture(false);
+    setPalette((p) => !p);
+  }, []);
+  const openCapture = useCallback(() => {
+    setPalette(false);
+    setCapture(true);
+  }, []);
   const escape = (): boolean => {
     if (palette) return (setPalette(false), true);
     if (capture) return (setCapture(false), true);
     if (follow.following) return (stopFollow(), true);
     return false;
   };
-
   return {
     palette,
     capture,
-    openPalette: useCallback(() => {
-      setCapture(false);
-      setPalette((p) => !p);
-    }, []),
-    closePalette: useCallback(() => setPalette(false), []),
-    openCapture: useCallback(() => {
-      setPalette(false);
-      setCapture(true);
-    }, []),
-    closeCapture: useCallback(() => setCapture(false), []),
+    openPalette,
+    openCapture,
     stopFollow,
-    toggleFollow: () => (follow.following ? stopFollow() : follow.start()),
     escape,
+    closePalette: useCallback(() => setPalette(false), []),
+    closeCapture: useCallback(() => setCapture(false), []),
+    toggleFollow: () => (follow.following ? stopFollow() : follow.start()),
   };
 }

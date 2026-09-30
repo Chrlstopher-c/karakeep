@@ -3,10 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@karakeep/shared-react/trpc";
 
 import { statusOf } from "../knowledge/conventions";
-import {
-  useDecisionBookmarks,
-  useSourceBookmarks,
-} from "../knowledge/useBookmarks";
+import { useDecisionBookmarks, useSourceBookmarks } from "../knowledge/useBookmarks";
 
 export interface NavCounts {
   decisions?: number;
@@ -20,9 +17,7 @@ export function useNavCounts(): NavCounts {
   const decisions = useDecisionBookmarks();
   const sources = useSourceBookmarks();
   return {
-    decisions: decisions.loading
-      ? undefined
-      : decisions.bookmarks.filter((b) => statusOf(b) === "ouverte").length,
+    decisions: decisions.loading ? undefined : decisions.bookmarks.filter((b) => statusOf(b) === "ouverte").length,
     sources: sources.loading ? undefined : sources.bookmarks.length,
     highlights: stats.data?.numHighlights,
   };

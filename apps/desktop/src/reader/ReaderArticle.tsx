@@ -1,11 +1,11 @@
-import type { MouseEvent, ReactElement, ReactNode, RefObject } from "react";
+import type { ReactElement, ReactNode, RefObject } from "react";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 
-import { openExternal } from "../shared/openExternal";
 import type { PaintedHighlight } from "./highlightDom";
-import { offsetsFromRange, paintHighlights } from "./highlightDom";
+import { paintHighlights } from "./highlightDom";
 import { sanitizeArticle } from "./sanitize";
 import { SweepLayer } from "./SweepLayer";
+import { useArticlePointer } from "./useArticlePointer";
 import { useSweeps } from "./useSweeps";
 
 export interface ArticleSelection {
@@ -27,80 +27,34 @@ interface ReaderArticleProps {
   contentRef: RefObject<HTMLDivElement | null>;
 }
 
-export function ReaderArticle({
-  html,
-  highlights,
-  fresh,
-  onFreshDone,
-  onSelect,
-  onHighlightClick,
-  children,
-  contentRef,
-}: ReaderArticleProps): ReactElement {
-  const containerRef = useRef<HTMLDivElement>(null);
+// Repeint les surlignages après chaque changement ; renvoie un compteur de peintures.
+function usePaint(
+  contentRef: RefObject<HTMLDivElement | null>,
+  highlights: PaintedHighlight[],
+  fresh: Set<string>,
+  html: object,
+): number {
   const [painted, setPainted] = useState(0);
-  const safeHtml = useMemo(() => ({ __html: sanitizeArticle(html) }), [html]);
-
   useLayoutEffect(() => {
     if (!contentRef.current) return;
     paintHighlights(contentRef.current, highlights, fresh);
     setPainted((n) => n + 1);
-  }, [highlights, fresh, safeHtml]);
+  }, [contentRef, highlights, fresh, html]);
+  return painted;
+}
 
+export function ReaderArticle(props: ReaderArticleProps): ReactElement {
+  const { html, highlights, fresh, onFreshDone, contentRef } = props;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const safeHtml = useMemo(() => ({ __html: sanitizeArticle(html) }), [html]);
+  const painted = usePaint(contentRef, highlights, fresh, safeHtml);
   const freshList = useMemo(
-    () =>
-      highlights
-        .filter((h) => fresh.has(h.id))
-        .map((h) => ({ id: h.id, color: h.color, byClaude: h.byClaude })),
+    () => highlights.filter((h) => fresh.has(h.id)).map((h) => ({ id: h.id, color: h.color, byClaude: h.byClaude })),
     // eslint-disable-next-line react-hooks/exhaustive-deps -- recalculé après chaque peinture
     [highlights, fresh, painted],
   );
-  const { sweeps, finish } = useSweeps(
-    containerRef.current,
-    contentRef.current,
-    freshList,
-    onFreshDone,
-  );
-
-  function onMouseUp(e: MouseEvent): void {
-    const target = e.target as HTMLElement; // cible d'un clic dans l'article : un élément
-    const mark = target.closest("mark[data-hl-id]");
-    const selection = window.getSelection();
-    if (mark && (!selection || selection.isCollapsed)) {
-      const origin = containerRef.current?.getBoundingClientRect();
-      onHighlightClick(
-        mark.getAttribute("data-hl-id") ?? "",
-        e.clientX - (origin?.left ?? 0),
-        e.clientY - (origin?.top ?? 0),
-      );
-      return;
-    }
-    if (
-      !selection ||
-      selection.isCollapsed ||
-      !contentRef.current ||
-      !containerRef.current
-    )
-      return onSelect(null);
-    const range = selection.getRangeAt(0);
-    const offsets = offsetsFromRange(contentRef.current, range);
-    if (!offsets || !offsets.text.trim()) return onSelect(null);
-    const rect = range.getBoundingClientRect();
-    const origin = containerRef.current.getBoundingClientRect();
-    onSelect({
-      ...offsets,
-      x: rect.left + rect.width / 2 - origin.left,
-      y: rect.top - origin.top,
-    });
-  }
-
-  function onClick(e: MouseEvent): void {
-    const link = (e.target as HTMLElement).closest("a"); // idem : clic sur un élément
-    if (!link) return;
-    e.preventDefault();
-    openExternal(link.href);
-  }
-
+  const { sweeps, finish } = useSweeps(containerRef.current, contentRef.current, freshList, onFreshDone);
+  const pointer = useArticlePointer(containerRef, contentRef, props.onSelect, props.onHighlightClick);
   return (
     <div ref={containerRef} className="relative isolate">
       <SweepLayer sweeps={sweeps} onFinish={finish} />
@@ -108,11 +62,11 @@ export function ReaderArticle({
         ref={contentRef}
         role="presentation"
         className="sv-article relative z-[1]"
-        onMouseUp={onMouseUp}
-        onClick={onClick}
+        onMouseUp={pointer.onMouseUp}
+        onClick={pointer.onClick}
         dangerouslySetInnerHTML={safeHtml}
       />
-      {children}
+      {props.children}
     </div>
   );
 }

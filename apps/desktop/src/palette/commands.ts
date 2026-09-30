@@ -1,4 +1,4 @@
-import type { Route } from "../app/navigation";
+import type { Route, ScreenId } from "../app/navigation";
 import type { ThemePreference } from "../app/useTheme";
 
 export interface PaletteCommand {
@@ -17,7 +17,19 @@ export interface CommandContext {
   openCapture: () => void;
 }
 
-export function buildCommands(ctx: CommandContext): PaletteCommand[] {
+const NAV_COMMANDS: { screen: ScreenId; title: string; kbd?: string; keywords: string }[] = [
+  { screen: "home", title: "Aller à l’accueil", keywords: "accueil home" },
+  { screen: "decisions", title: "Aller aux décisions", kbd: "G D", keywords: "décisions fiches" },
+  { screen: "sources", title: "Aller aux sources", kbd: "G S", keywords: "sources liens" },
+  { screen: "highlights", title: "Aller aux surlignages", kbd: "G H", keywords: "surlignages passages" },
+  { screen: "projects", title: "Aller aux projets", kbd: "G P", keywords: "projets" },
+  { screen: "tags", title: "Aller aux tags", keywords: "tags étiquettes" },
+  { screen: "claude", title: "Claude et journal d’activité", keywords: "claude journal mcp intégration" },
+  { screen: "settings", title: "Réglages", kbd: "⌘/", keywords: "réglages paramètres settings" },
+];
+
+function actionCommands(ctx: CommandContext): PaletteCommand[] {
+  const next = ctx.theme === "clair" ? "night" : "clair";
   return [
     {
       id: "capture",
@@ -26,76 +38,25 @@ export function buildCommands(ctx: CommandContext): PaletteCommand[] {
       keywords: "ajouter capture nouveau lien note",
       run: ctx.openCapture,
     },
-    {
-      id: "follow",
-      title: "Suivre Claude",
-      kbd: "F",
-      keywords: "suivre claude suivi direct",
-      run: ctx.toggleFollow,
-    },
+    { id: "follow", title: "Suivre Claude", kbd: "F", keywords: "suivre claude suivi direct", run: ctx.toggleFollow },
     {
       id: "theme",
-      title:
-        ctx.theme === "clair"
-          ? "Basculer le thème : night"
-          : "Basculer le thème : clair",
+      title: `Basculer le thème : ${next}`,
       keywords: "thème theme clair night sombre",
-      run: () => ctx.setTheme(ctx.theme === "clair" ? "night" : "clair"),
-    },
-    {
-      id: "home",
-      title: "Aller à l’accueil",
-      keywords: "accueil home",
-      run: () => ctx.go({ screen: "home" }),
-    },
-    {
-      id: "decisions",
-      title: "Aller aux décisions",
-      kbd: "G D",
-      keywords: "décisions fiches",
-      run: () => ctx.go({ screen: "decisions" }),
-    },
-    {
-      id: "sources",
-      title: "Aller aux sources",
-      kbd: "G S",
-      keywords: "sources liens",
-      run: () => ctx.go({ screen: "sources" }),
-    },
-    {
-      id: "highlights",
-      title: "Aller aux surlignages",
-      kbd: "G H",
-      keywords: "surlignages passages",
-      run: () => ctx.go({ screen: "highlights" }),
-    },
-    {
-      id: "projects",
-      title: "Aller aux projets",
-      kbd: "G P",
-      keywords: "projets",
-      run: () => ctx.go({ screen: "projects" }),
-    },
-    {
-      id: "tags",
-      title: "Aller aux tags",
-      keywords: "tags étiquettes",
-      run: () => ctx.go({ screen: "tags" }),
-    },
-    {
-      id: "claude",
-      title: "Claude et journal d’activité",
-      keywords: "claude journal mcp intégration",
-      run: () => ctx.go({ screen: "claude" }),
-    },
-    {
-      id: "settings",
-      title: "Réglages",
-      kbd: "⌘/",
-      keywords: "réglages paramètres settings",
-      run: () => ctx.go({ screen: "settings" }),
+      run: () => ctx.setTheme(next),
     },
   ];
+}
+
+export function buildCommands(ctx: CommandContext): PaletteCommand[] {
+  const nav = NAV_COMMANDS.map((c) => ({
+    id: c.screen,
+    title: c.title,
+    kbd: c.kbd,
+    keywords: c.keywords,
+    run: () => ctx.go({ screen: c.screen }),
+  }));
+  return [...actionCommands(ctx), ...nav];
 }
 
 function normalize(s: string): string {
@@ -105,13 +66,8 @@ function normalize(s: string): string {
     .toLowerCase();
 }
 
-export function matchCommands(
-  commands: PaletteCommand[],
-  query: string,
-): PaletteCommand[] {
+export function matchCommands(commands: PaletteCommand[], query: string): PaletteCommand[] {
   const q = normalize(query.trim());
   if (!q) return commands.slice(0, 6);
-  return commands.filter((c) =>
-    normalize(`${c.title} ${c.keywords}`).includes(q),
-  );
+  return commands.filter((c) => normalize(`${c.title} ${c.keywords}`).includes(q));
 }

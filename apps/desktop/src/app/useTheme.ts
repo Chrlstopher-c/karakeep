@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 export type ThemePreference = "night" | "clair" | "systeme";
 
@@ -21,9 +15,7 @@ function readPreference(): ThemePreference {
 
 function resolve(pref: ThemePreference): "night" | "clair" {
   if (pref !== "systeme") return pref;
-  return window.matchMedia("(prefers-color-scheme: light)").matches
-    ? "clair"
-    : "night";
+  return window.matchMedia("(prefers-color-scheme: light)").matches ? "clair" : "night";
 }
 
 export function useTheme(): {

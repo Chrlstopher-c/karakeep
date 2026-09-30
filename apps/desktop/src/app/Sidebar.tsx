@@ -32,13 +32,9 @@ function UserFooter({
       </span>
       {!collapsed && (
         <span className="flex min-w-0 flex-1 flex-col gap-[5px]">
-          <span className="text-[13px] font-bold leading-none text-[#F3F1F6]">
-            {me.data?.name ?? ""}
-          </span>
+          <span className="text-[13px] font-bold leading-none text-[#F3F1F6]">{me.data?.name ?? ""}</span>
           <span className="flex items-center gap-1.5 truncate font-mono text-[11px] leading-none text-[#A39DB5]">
-            <span
-              className={`size-1.5 flex-none rounded-full ${online ? "bg-[#3FB785]" : "bg-[#E0A94A]"}`}
-            />
+            <span className={`size-1.5 flex-none rounded-full ${online ? "bg-[#3FB785]" : "bg-[#E0A94A]"}`} />
             {online ? serverLabel : `${serverLabel} · injoignable`}
           </span>
         </span>
@@ -71,10 +67,7 @@ export function Sidebar({
       <div
         className={`flex h-full flex-col transition-opacity duration-300 hover:opacity-100 ${dimmed ? "opacity-50" : "opacity-100"}`}
       >
-        <div
-          data-tauri-drag-region
-          className="flex h-16 flex-none items-center gap-2.5 pl-[22px] pr-3"
-        >
+        <div data-tauri-drag-region className="flex h-16 flex-none items-center gap-2.5 pl-[22px] pr-3">
           {!collapsed && (
             <span
               data-tauri-drag-region
@@ -93,28 +86,12 @@ export function Sidebar({
           </button>
         </div>
         <nav className="relative flex min-h-0 flex-1 flex-col gap-1 px-3 pb-3 pt-1">
-          <SidebarNav
-            collapsed={collapsed}
-            counts={counts}
-            claudeBusy={activity.busy}
-          />
+          <SidebarNav collapsed={collapsed} counts={counts} claudeBusy={activity.busy} />
           <div className="flex-1" />
-          <ClaudePresence
-            activity={activity}
-            collapsed={collapsed}
-            onOpen={() => go({ screen: "claude" })}
-          />
-          <NavButton
-            item={SETTINGS_ITEM}
-            collapsed={collapsed}
-            counts={counts}
-          />
+          <ClaudePresence activity={activity} collapsed={collapsed} onOpen={() => go({ screen: "claude" })} />
+          <NavButton item={SETTINGS_ITEM} collapsed={collapsed} counts={counts} />
         </nav>
-        <UserFooter
-          collapsed={collapsed}
-          serverLabel={serverLabel}
-          online={online}
-        />
+        <UserFooter collapsed={collapsed} serverLabel={serverLabel} online={online} />
       </div>
     </aside>
   );

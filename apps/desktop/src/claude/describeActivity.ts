@@ -34,8 +34,7 @@ export function activitySentence(item: AgentActivityItem): string {
 
 // Résumé groupé : « 1 source ajoutée, 2 passages surlignés, 1 fiche rédigée ».
 export function summarize(items: AgentActivityItem[]): string {
-  const count = (path: string): number =>
-    items.filter((i) => i.path === path).length;
+  const count = (path: string): number => items.filter((i) => i.path === path).length;
   const parts: string[] = [];
   const add = (n: number, one: string, many: string): void => {
     if (n > 0) parts.push(`${n} ${n > 1 ? many : one}`);
@@ -46,10 +45,6 @@ export function summarize(items: AgentActivityItem[]): string {
   add(added, "source ajoutée", "sources ajoutées");
   add(highlighted, "passage surligné", "passages surlignés");
   add(written, "fiche rédigée", "fiches rédigées");
-  add(
-    items.length - added - highlighted - written,
-    "autre action",
-    "autres actions",
-  );
+  add(items.length - added - highlighted - written, "autre action", "autres actions");
   return parts.join(", ");
 }

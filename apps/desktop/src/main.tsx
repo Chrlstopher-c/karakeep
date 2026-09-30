@@ -6,10 +6,7 @@ import { App } from "./app/App";
 import "./shared/theme.css";
 
 // Dev : ?test coupe les animations (onglet de navigateur en arrière-plan, sans images).
-if (
-  import.meta.env.DEV &&
-  new URLSearchParams(window.location.search).has("test")
-) {
+if (import.meta.env.DEV && new URLSearchParams(window.location.search).has("test")) {
   MotionGlobalConfig.skipAnimations = true;
 }
 

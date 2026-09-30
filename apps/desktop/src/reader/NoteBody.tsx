@@ -18,13 +18,7 @@ function NoteImage({ src, alt }: { src?: string; alt?: string }): ReactElement {
   return <img src={assetId ? assetUrl : src} alt={alt ?? ""} />;
 }
 
-function NoteLink({
-  href,
-  children,
-}: {
-  href?: string;
-  children?: React.ReactNode;
-}): ReactElement {
+function NoteLink({ href, children }: { href?: string; children?: React.ReactNode }): ReactElement {
   const { go } = useNavigation();
   const internal = href?.match(PREVIEW_PATH)?.[1];
   return (
@@ -48,15 +42,8 @@ export function NoteBody({ markdown }: { markdown: string }): ReactElement {
       <Markdown
         remarkPlugins={[remarkGfm, remarkBreaks, remarkMark]}
         components={{
-          img: ({ src, alt }) => (
-            <NoteImage
-              src={typeof src === "string" ? src : undefined}
-              alt={alt}
-            />
-          ),
-          a: ({ href, children }) => (
-            <NoteLink href={href}>{children}</NoteLink>
-          ),
+          img: ({ src, alt }) => <NoteImage src={typeof src === "string" ? src : undefined} alt={alt} />,
+          a: ({ href, children }) => <NoteLink href={href}>{children}</NoteLink>,
           code: ({ className, children }) =>
             className?.includes("language-mermaid") ? (
               <MermaidDiagram chart={String(children).trim()} />

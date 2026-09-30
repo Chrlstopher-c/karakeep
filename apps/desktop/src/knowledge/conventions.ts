@@ -14,11 +14,7 @@ export type KnowledgeListKey = keyof typeof LIST_NAMES;
 
 export type DecisionStatus = "ouverte" | "tranchée" | "abandonnée";
 
-export const DECISION_STATUSES: DecisionStatus[] = [
-  "ouverte",
-  "tranchée",
-  "abandonnée",
-];
+export const DECISION_STATUSES: DecisionStatus[] = ["ouverte", "tranchée", "abandonnée"];
 
 function tagValue(bookmark: ZBookmark, prefix: string): string | null {
   const tag = bookmark.tags.find((t) => t.name.startsWith(`${prefix}:`));

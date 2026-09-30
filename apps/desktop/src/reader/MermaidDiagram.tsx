@@ -27,8 +27,7 @@ export function MermaidDiagram({ chart }: { chart: string }): ReactElement {
         }
       } catch (cause) {
         log.warn(`schéma mermaid : ${String(cause)}`);
-        if (!cancelled)
-          setError(cause instanceof Error ? cause.message : String(cause));
+        if (!cancelled) setError(cause instanceof Error ? cause.message : String(cause));
       }
     })();
     return () => {
@@ -36,14 +35,7 @@ export function MermaidDiagram({ chart }: { chart: string }): ReactElement {
     };
   }, [chart, id, dark]);
 
-  if (error)
-    return <pre className="text-err text-sm">{`${error}\n\n${chart}`}</pre>;
-  if (!svg)
-    return <div className="bg-surface-2 my-4 h-24 animate-pulse rounded-2xl" />;
-  return (
-    <div
-      className="my-4 flex justify-center overflow-x-auto"
-      dangerouslySetInnerHTML={{ __html: svg }}
-    />
-  );
+  if (error) return <pre className="text-err text-sm">{`${error}\n\n${chart}`}</pre>;
+  if (!svg) return <div className="bg-surface-2 my-4 h-24 animate-pulse rounded-2xl" />;
+  return <div className="my-4 flex justify-center overflow-x-auto" dangerouslySetInnerHTML={{ __html: svg }} />;
 }

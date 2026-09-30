@@ -3,11 +3,9 @@ import type { ReactElement } from "react";
 // Tracés du prototype (grille 24, trait 1,8).
 export const ICON_PATHS = {
   home: "M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z",
-  decisions:
-    "M12 4v16M6 7h12M6 7l-3 6.5a3 3 0 0 0 6 0zM18 7l-3 6.5a3 3 0 0 0 6 0zM8.5 20h7",
+  decisions: "M12 4v16M6 7h12M6 7l-3 6.5a3 3 0 0 0 6 0zM18 7l-3 6.5a3 3 0 0 0 6 0zM8.5 20h7",
   sources: "M6.5 3.5h8l3.5 3.5v13.5h-11.5zM14.5 3.5V7H18M9.5 11.5h5M9.5 15.5h5",
-  projects:
-    "M3.5 7a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z",
+  projects: "M3.5 7a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z",
   highlights: "M14.5 4.5l5 5L10 19H5v-5zM4 21.5h16",
   tags: "M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3a1.5 1.5 0 0 1 0 2.1l-6.1 6.1a1.5 1.5 0 0 1-2.1 0zM8 8h.01",
   claude: "M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9",
@@ -23,8 +21,7 @@ export const ICON_PATHS = {
   check: "M5 12.5l4.5 4.5L19 7.5",
   chevronLeft: "M14.5 6l-6 6 6 6",
   chevronDown: "M6 9.5l6 6 6-6",
-  external:
-    "M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5",
+  external: "M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5",
   note: "M5 4h14v16H5zM8.5 9h7M8.5 13h7M8.5 17h4",
   grid: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z",
   list: "M4 6h16M4 12h16M4 18h16",

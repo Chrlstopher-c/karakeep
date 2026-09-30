@@ -48,13 +48,9 @@ describe("parseSheet", () => {
   test("retenir une option réécrit seulement la section Décision", () => {
     const line = decisionLine("Réseau maillé", new Date(2026, 8, 30), "Chris");
     const updated = replaceSection(NOTE, "decision", line);
-    expect(parseSheet(updated).decision).toBe(
-      "Réseau maillé — 30 septembre 2026, Chris",
-    );
+    expect(parseSheet(updated).decision).toBe("Réseau maillé — 30 septembre 2026, Chris");
     expect(updated).toContain("Intro libre.");
     expect(parseSheet(updated).options).toHaveLength(2);
-    expect(parseSheet(updated).consequences).toBe(
-      "Le téléphone rejoint le réseau privé.",
-    );
+    expect(parseSheet(updated).consequences).toBe("Le téléphone rejoint le réseau privé.");
   });
 });

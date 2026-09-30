@@ -12,13 +12,8 @@ export function useKnowledgeLists(): KnowledgeLists {
   const trpc = useTRPC();
   const { data } = useQuery(trpc.lists.list.queryOptions());
   const ids: KnowledgeLists = {};
-  for (const [key, name] of Object.entries(LIST_NAMES) as [
-    KnowledgeListKey,
-    string,
-  ][]) {
-    const list = data?.lists.find(
-      (l) => l.name.trim().toLowerCase() === name.toLowerCase(),
-    );
+  for (const [key, name] of Object.entries(LIST_NAMES) as [KnowledgeListKey, string][]) {
+    const list = data?.lists.find((l) => l.name.trim().toLowerCase() === name.toLowerCase());
     if (list) ids[key] = list.id;
   }
   return ids;

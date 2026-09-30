@@ -13,9 +13,7 @@ export function useCaptureShortcut(open: () => void): void {
       .then((fn) => {
         unlisten = fn;
       })
-      .catch((cause: unknown) =>
-        log.warn(`raccourci global indisponible : ${String(cause)}`),
-      );
+      .catch((cause: unknown) => log.warn(`raccourci global indisponible : ${String(cause)}`));
     return () => unlisten?.();
   }, [open]);
 }

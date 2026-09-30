@@ -23,10 +23,7 @@ export async function mcpStatus(): Promise<McpStatus> {
   return invoke<McpStatus>("claude_mcp_status");
 }
 
-export async function installMcp(
-  address: string,
-  apiKey: string,
-): Promise<void> {
+export async function installMcp(address: string, apiKey: string): Promise<void> {
   if (!IN_TAURI) throw new Error("Disponible seulement dans l'app Savoir.");
   await invoke("claude_mcp_install", { address, apiKey });
 }
@@ -34,21 +31,11 @@ export async function installMcp(
 export const MCP_TOOLS: { group: string; items: string[] }[] = [
   {
     group: "LECTURE",
-    items: [
-      "search-bookmarks",
-      "get-bookmark",
-      "get-bookmark-content",
-      "get-asset",
-    ],
+    items: ["search-bookmarks", "get-bookmark", "get-bookmark-content", "get-asset"],
   },
   {
     group: "AJOUT",
-    items: [
-      "create-bookmark",
-      "update-bookmark",
-      "upload-asset",
-      "delete-bookmark",
-    ],
+    items: ["create-bookmark", "update-bookmark", "upload-asset", "delete-bookmark"],
   },
   {
     group: "SURLIGNAGE",

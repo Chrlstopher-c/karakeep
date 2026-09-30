@@ -5,9 +5,7 @@ import { log } from "./log";
 
 // Les fichiers du serveur exigent la clé API : on les charge en blob et on
 // sert une URL locale au webview (une balise <img> ne peut pas envoyer l'en-tête).
-export function useAssetUrl(
-  assetId: string | null | undefined,
-): string | undefined {
+export function useAssetUrl(assetId: string | null | undefined): string | undefined {
   const { address, apiKey } = useActiveConnection();
   const { data } = useQuery({
     queryKey: ["savoir", "asset", address, assetId],

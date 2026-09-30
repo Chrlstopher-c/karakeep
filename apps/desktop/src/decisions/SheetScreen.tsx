@@ -49,9 +49,7 @@ function SheetTopBar({
         Décisions<Kbd>ÉCHAP</Kbd>
       </button>
       <span className="flex-1" />
-      <span className="font-mono text-[12px] leading-none text-muted">
-        {updated}
-      </span>
+      <span className="font-mono text-[12px] leading-none text-muted">{updated}</span>
       {!editing && (
         <button
           type="button"
@@ -76,9 +74,7 @@ function SheetHeader({ bookmark }: { bookmark: ZBookmark }): ReactElement {
         {getBookmarkTitle(bookmark) ?? "Sans titre"}
       </h1>
       <Rise index={1} className="flex flex-wrap items-center gap-3">
-        <span
-          className={`h-[26px] rounded-full px-3 text-[12px] font-bold leading-[26px] ${status.cls}`}
-        >
+        <span className={`h-[26px] rounded-full px-3 text-[12px] font-bold leading-[26px] ${status.cls}`}>
           {status.label}
         </span>
         <span className="font-mono text-[12px] leading-none text-muted">
@@ -94,25 +90,14 @@ function useEditShortcut(active: boolean, onEdit: () => void): void {
     if (!active) return;
     const onKey = (e: KeyboardEvent): void => {
       const tag = (e.target as HTMLElement | null)?.tagName; // cible clavier : élément ou null
-      if (
-        e.key === "e" &&
-        !e.metaKey &&
-        !e.ctrlKey &&
-        tag !== "INPUT" &&
-        tag !== "TEXTAREA"
-      )
-        onEdit();
+      if (e.key === "e" && !e.metaKey && !e.ctrlKey && tag !== "INPUT" && tag !== "TEXTAREA") onEdit();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [active, onEdit]);
 }
 
-export function SheetScreen({
-  bookmarkId,
-}: {
-  bookmarkId: string;
-}): ReactElement {
+export function SheetScreen({ bookmarkId }: { bookmarkId: string }): ReactElement {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const bookmark = useQuery({
@@ -136,12 +121,9 @@ export function SheetScreen({
   const text = b.content.type === "text" ? b.content.text : "";
 
   const save = async (title: string, next: string): Promise<void> => {
-    if (title !== getBookmarkTitle(b))
-      await rename.mutateAsync({ bookmarkId: b.id, title });
+    if (title !== getBookmarkTitle(b)) await rename.mutateAsync({ bookmarkId: b.id, title });
     await actions.saveText(b.id, next);
-    await queryClient.invalidateQueries(
-      trpc.bookmarks.getBookmark.pathFilter(),
-    );
+    await queryClient.invalidateQueries(trpc.bookmarks.getBookmark.pathFilter());
     setEditing(false);
   };
 
@@ -164,12 +146,7 @@ export function SheetScreen({
           ) : (
             <>
               <SheetHeader bookmark={b} />
-              <SheetBody
-                bookmark={b}
-                text={text}
-                byClaude={provenance.bookmarkIds.has(b.id)}
-                actions={actions}
-              />
+              <SheetBody bookmark={b} text={text} byClaude={provenance.bookmarkIds.has(b.id)} actions={actions} />
             </>
           )}
         </div>

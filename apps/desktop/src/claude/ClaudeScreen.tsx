@@ -31,8 +31,8 @@ export function ClaudeScreen({
           de la base
         </h1>
         <p className="m-0 max-w-[64ch] text-base font-medium leading-normal text-muted">
-          Claude Code se connecte à Savoir par le serveur MCP karakeep. Ses
-          actions arrivent par l’API comme celles de Chris et portent sa marque.
+          Claude Code se connecte à Savoir par le serveur MCP karakeep. Ses actions arrivent par l’API comme celles de
+          Chris et portent sa marque.
         </p>
       </Rise>
       <div className="flex flex-wrap items-start gap-6">
@@ -48,11 +48,7 @@ export function ClaudeScreen({
           </Rise>
         </div>
         <Rise index={2} className="flex min-w-0 max-w-[480px] flex-[1_1_360px]">
-          <ActivityJournal
-            items={activity.items}
-            following={following}
-            onToggleFollow={onToggleFollow}
-          />
+          <ActivityJournal items={activity.items} following={following} onToggleFollow={onToggleFollow} />
         </Rise>
       </div>
     </div>

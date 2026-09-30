@@ -42,15 +42,10 @@ function HomeHeader({
           </span>{" "}
           depuis hier
         </h1>
-        <p className="m-0 max-w-[62ch] text-pretty text-base font-medium leading-normal text-muted">
-          {summary}
-        </p>
+        <p className="m-0 max-w-[62ch] text-pretty text-base font-medium leading-normal text-muted">{summary}</p>
       </div>
       <div className="flex items-center gap-3">
-        <Button
-          onClick={onFollow}
-          className="text-soft hover:text-text h-10 pl-3.5 pr-2.5 text-sm"
-        >
+        <Button onClick={onFollow} className="text-soft hover:text-text h-10 pl-3.5 pr-2.5 text-sm">
           Suivre Claude <Kbd>F</Kbd>
         </Button>
         <Button variant="primary" onClick={onCapture}>
@@ -105,11 +100,7 @@ export function HomeScreen({
   return (
     <div className="mx-auto flex max-w-[1320px] flex-col gap-9 px-10 pb-20 pt-9">
       <Rise>
-        <HomeHeader
-          onFollow={onFollow}
-          onCapture={onCapture}
-          summary={summary}
-        />
+        <HomeHeader onFollow={onFollow} onCapture={onCapture} summary={summary} />
       </Rise>
       <div className="flex flex-wrap items-start gap-7">
         <div className="flex min-w-0 flex-[1_1_560px] flex-col gap-9">

@@ -23,10 +23,7 @@ function ConnectedApp({
   const { address, apiKey } = connection;
   // Un seul client tRPC par couple adresse/clé, même si la connexion est relue.
   const settings = useMemo(() => ({ address, apiKey }), [address, apiKey]);
-  const active = useMemo(
-    () => ({ ...settings, disconnect: onDisconnect }),
-    [settings, onDisconnect],
-  );
+  const active = useMemo(() => ({ ...settings, disconnect: onDisconnect }), [settings, onDisconnect]);
   return (
     <ConnectionContext.Provider value={active}>
       <TRPCSettingsProvider settings={settings}>
@@ -48,15 +45,9 @@ export function App(): ReactElement {
     <ThemeContext.Provider value={theme}>
       <MotionConfig reducedMotion="user">
         <AnimatePresence mode="wait">
-          {state.status === "missing" && (
-            <ConnectionScreen key="connexion" onConnect={connect} />
-          )}
+          {state.status === "missing" && <ConnectionScreen key="connexion" onConnect={connect} />}
           {state.status === "ready" && (
-            <ConnectedApp
-              key="app"
-              connection={state.connection}
-              onDisconnect={onDisconnect}
-            />
+            <ConnectedApp key="app" connection={state.connection} onDisconnect={onDisconnect} />
           )}
         </AnimatePresence>
         {launching && <LaunchScreen onDone={endLaunch} />}

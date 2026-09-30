@@ -10,8 +10,7 @@ export const ConnectionContext = createContext<ActiveConnection | null>(null);
 
 export function useActiveConnection(): ActiveConnection {
   const connection = useContext(ConnectionContext);
-  if (!connection)
-    throw new Error("useActiveConnection hors d'une connexion active");
+  if (!connection) throw new Error("useActiveConnection hors d'une connexion active");
   return connection;
 }
 

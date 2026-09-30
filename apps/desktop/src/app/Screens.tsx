@@ -49,12 +49,7 @@ function renderScreen(route: Route, actions: ScreenActions): ReactElement {
     case "sheet":
       return <SheetScreen bookmarkId={route.bookmarkId} />;
     case "reader":
-      return (
-        <ReaderScreen
-          bookmarkId={route.bookmarkId}
-          highlightId={route.highlightId}
-        />
-      );
+      return <ReaderScreen bookmarkId={route.bookmarkId} highlightId={route.highlightId} />;
     case "sources":
       return <SourcesScreen onCapture={actions.onCapture} />;
   }

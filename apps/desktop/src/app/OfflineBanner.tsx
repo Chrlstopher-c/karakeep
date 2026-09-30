@@ -22,8 +22,7 @@ export function OfflineBanner({
     >
       <span className="bg-warn size-2 flex-none rounded-full" />
       <span className="min-w-0 flex-1">
-        Serveur injoignable : {serverLabel} ne répond pas. Le contenu déjà
-        chargé reste consultable en lecture seule.
+        Serveur injoignable : {serverLabel} ne répond pas. Le contenu déjà chargé reste consultable en lecture seule.
       </span>
       <button
         type="button"

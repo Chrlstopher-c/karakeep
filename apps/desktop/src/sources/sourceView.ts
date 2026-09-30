@@ -1,4 +1,4 @@
-import type { ZBookmark } from "@karakeep/shared/types/bookmarks";
+import type { ZBookmark, ZBookmarkedAsset, ZBookmarkedLink } from "@karakeep/shared/types/bookmarks";
 import { getBookmarkTitle } from "@karakeep/shared/utils/bookmarkUtils";
 
 export type SourceKind = "lien" | "note" | "image" | "pdf";
@@ -40,50 +40,39 @@ function stripMarkdown(text: string): string {
     .trim();
 }
 
-export function toSourceView(bookmark: ZBookmark): SourceView {
-  const base = {
-    id: bookmark.id,
-    title: getBookmarkTitle(bookmark) ?? "Sans titre",
-    createdAt: bookmark.createdAt,
-  };
-  const content = bookmark.content;
-  if (content.type === "link") {
-    return {
-      ...base,
-      kind: "lien",
-      domain: hostOf(content.url),
-      excerpt: content.description ?? null,
-      imageUrl: content.imageUrl ?? null,
-      imageAssetId: bannerAsset(bookmark) ?? content.imageAssetId ?? null,
-    };
-  }
-  if (content.type === "text") {
-    return {
-      ...base,
-      kind: "note",
-      domain: "Note",
-      excerpt: stripMarkdown(content.text).slice(0, 220),
-      imageUrl: null,
-      imageAssetId: bannerAsset(bookmark),
-    };
-  }
-  if (content.type === "asset") {
-    const kind = content.assetType === "pdf" ? "pdf" : "image";
-    return {
-      ...base,
-      kind,
-      domain: content.fileName ?? KIND_LABEL[kind],
-      excerpt: null,
-      imageUrl: null,
-      imageAssetId: kind === "image" ? content.assetId : bannerAsset(bookmark),
-    };
-  }
+type ViewParts = Omit<SourceView, "id" | "title" | "createdAt">;
+
+function linkParts(bookmark: ZBookmark, c: ZBookmarkedLink): ViewParts {
   return {
-    ...base,
     kind: "lien",
-    domain: "",
-    excerpt: null,
-    imageUrl: null,
-    imageAssetId: null,
+    domain: hostOf(c.url),
+    excerpt: c.description ?? null,
+    imageUrl: c.imageUrl ?? null,
+    imageAssetId: bannerAsset(bookmark) ?? c.imageAssetId ?? null,
   };
+}
+
+function noteParts(bookmark: ZBookmark, text: string): ViewParts {
+  return {
+    kind: "note",
+    domain: "Note",
+    excerpt: stripMarkdown(text).slice(0, 220),
+    imageUrl: null,
+    imageAssetId: bannerAsset(bookmark),
+  };
+}
+
+function assetParts(bookmark: ZBookmark, c: ZBookmarkedAsset): ViewParts {
+  const kind = c.assetType === "pdf" ? "pdf" : "image";
+  const imageAssetId = kind === "image" ? c.assetId : bannerAsset(bookmark);
+  return { kind, domain: c.fileName ?? KIND_LABEL[kind], excerpt: null, imageUrl: null, imageAssetId };
+}
+
+export function toSourceView(bookmark: ZBookmark): SourceView {
+  const base = { id: bookmark.id, title: getBookmarkTitle(bookmark) ?? "Sans titre", createdAt: bookmark.createdAt };
+  const c = bookmark.content;
+  if (c.type === "link") return { ...base, ...linkParts(bookmark, c) };
+  if (c.type === "text") return { ...base, ...noteParts(bookmark, c.text) };
+  if (c.type === "asset") return { ...base, ...assetParts(bookmark, c) };
+  return { ...base, kind: "lien", domain: "", excerpt: null, imageUrl: null, imageAssetId: null };
 }

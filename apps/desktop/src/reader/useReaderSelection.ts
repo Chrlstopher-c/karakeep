@@ -11,9 +11,7 @@ export type ToolbarTarget =
 
 // Barre de surlignage : sélection en cours ou surlignage cliqué ; 1 à 4 applique
 // une couleur, Échap ferme la barre avant de quitter le lecteur.
-export function useReaderSelection(
-  apply: (target: ToolbarTarget, color: ZHighlightColor) => void,
-) {
+export function useReaderSelection(apply: (target: ToolbarTarget, color: ZHighlightColor) => void) {
   const [target, setTarget] = useState<ToolbarTarget | null>(null);
   const ref = useRef({ target, apply });
   ref.current = { target, apply };

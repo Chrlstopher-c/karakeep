@@ -19,9 +19,7 @@ export function Segmented<T extends string>({
   square?: boolean;
 }): ReactElement {
   return (
-    <div
-      className={`bg-surface-2 flex rounded-xl p-[3px] ${square ? "gap-1" : "gap-0.5"}`}
-    >
+    <div className={`bg-surface-2 flex rounded-xl p-[3px] ${square ? "gap-1" : "gap-0.5"}`}>
       {options.map((o) => {
         const active = o.value === value;
         return (

@@ -23,14 +23,10 @@ export function useAllBookmarks(): BookmarkSet {
       { getNextPageParam: (page) => page.nextCursor },
     ),
   );
-  const bookmarks = useMemo(
-    () => query.data?.pages.flatMap((p) => p.bookmarks) ?? [],
-    [query.data],
-  );
+  const bookmarks = useMemo(() => query.data?.pages.flatMap((p) => p.bookmarks) ?? [], [query.data]);
   const { hasNextPage, isFetchingNextPage, fetchNextPage } = query;
   useEffect(() => {
-    if (hasNextPage && !isFetchingNextPage && bookmarks.length < MAX_BOOKMARKS)
-      void fetchNextPage();
+    if (hasNextPage && !isFetchingNextPage && bookmarks.length < MAX_BOOKMARKS) void fetchNextPage();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage, bookmarks.length]);
   return { bookmarks, loading: query.isPending };
 }

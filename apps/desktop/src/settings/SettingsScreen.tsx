@@ -53,9 +53,7 @@ function ServerCard(): ReactElement {
   const [result, setResult] = useState<string | null>(null);
   const test = async (): Promise<void> => {
     setResult("Test…");
-    setResult(
-      (await checkConnection({ address, apiKey })) ?? "Connexion établie.",
-    );
+    setResult((await checkConnection({ address, apiKey })) ?? "Connexion établie.");
   };
   return (
     <Card index={1}>
@@ -72,9 +70,7 @@ function ServerCard(): ReactElement {
           Se déconnecter
         </Button>
       </div>
-      {result && (
-        <span className="font-mono text-[12px] text-muted">{result}</span>
-      )}
+      {result && <span className="font-mono text-[12px] text-muted">{result}</span>}
     </Card>
   );
 }
@@ -91,17 +87,11 @@ function AppearanceCard(): ReactElement {
       <h2 className="text-text m-0 text-base font-bold">Apparence</h2>
       <div className="flex flex-wrap items-center gap-4">
         <span className="text-soft min-w-40 flex-1 text-sm">Thème</span>
-        <Segmented
-          value={theme.preference}
-          onChange={theme.setPreference}
-          options={options}
-        />
+        <Segmented value={theme.preference} onChange={theme.setPreference} options={options} />
       </div>
       <div className="flex items-center gap-4">
         <span className="text-soft flex-1 text-sm">Mouvement réduit</span>
-        <span className="font-mono text-[11px] tracking-[0.1em] text-muted">
-          SUIT LE RÉGLAGE DU SYSTÈME
-        </span>
+        <span className="font-mono text-[11px] tracking-[0.1em] text-muted">SUIT LE RÉGLAGE DU SYSTÈME</span>
       </div>
     </Card>
   );
@@ -115,9 +105,7 @@ export function SettingsScreen(): ReactElement {
     <div className="mx-auto flex max-w-[820px] flex-col gap-5 px-10 pb-20 pt-9">
       <Rise className="mb-2 flex flex-col gap-3">
         <Eyebrow>APPLICATION</Eyebrow>
-        <h1 className="text-text m-0 text-[28px] font-extrabold leading-[1.15] tracking-[-0.035em]">
-          Réglages
-        </h1>
+        <h1 className="text-text m-0 text-[28px] font-extrabold leading-[1.15] tracking-[-0.035em]">Réglages</h1>
       </Rise>
       <ServerCard />
       <AppearanceCard />
@@ -125,10 +113,7 @@ export function SettingsScreen(): ReactElement {
         <h2 className="text-text m-0 text-base font-bold">Raccourcis</h2>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-x-7 gap-y-1">
           {SHORTCUTS.map(([label, keys]) => (
-            <div
-              key={label}
-              className="border-line flex h-[38px] items-center gap-3 border-b"
-            >
+            <div key={label} className="border-line flex h-[38px] items-center gap-3 border-b">
               <span className="text-soft flex-1 text-sm">{label}</span>
               <Kbd>{keys}</Kbd>
             </div>
@@ -139,8 +124,7 @@ export function SettingsScreen(): ReactElement {
         <div className="flex min-w-[260px] flex-1 flex-col gap-1.5">
           <h2 className="text-text m-0 text-base font-bold">Interface web</h2>
           <span className="text-sm text-muted">
-            Administration, flux RSS, règles automatiques, imports et exports
-            restent dans l’interface web.
+            Administration, flux RSS, règles automatiques, imports et exports restent dans l’interface web.
           </span>
         </div>
         <Button className="h-10 text-sm" onClick={() => openExternal(address)}>
@@ -148,16 +132,10 @@ export function SettingsScreen(): ReactElement {
         </Button>
       </Card>
       <Card index={5} className="flex-row flex-wrap items-center gap-6 py-7">
-        <img
-          src={dark ? logoWhite : logoBlack}
-          alt="Echo Agency"
-          className="h-14"
-        />
+        <img src={dark ? logoWhite : logoBlack} alt="Echo Agency" className="h-14" />
         <div className="flex flex-col gap-1.5">
           <span className="text-text text-lg font-extrabold">Savoir 0.1</span>
-          <span className="font-mono text-[11px] tracking-[0.14em] text-muted">
-            UN OUTIL ECHO AGENCY
-          </span>
+          <span className="font-mono text-[11px] tracking-[0.14em] text-muted">UN OUTIL ECHO AGENCY</span>
         </div>
       </Card>
     </div>

@@ -18,9 +18,7 @@ export function DecisionCard({
   byClaude: boolean;
   onOpen: () => void;
 }): ReactElement {
-  const sheet = parseSheet(
-    bookmark.content.type === "text" ? bookmark.content.text : "",
-  );
+  const sheet = parseSheet(bookmark.content.type === "text" ? bookmark.content.text : "");
   const project = projectOf(bookmark);
   const decided = statusOf(bookmark) === "tranchée" && sheet.decision;
   const n = sheet.options.length;
@@ -42,12 +40,8 @@ export function DecisionCard({
       </span>
       {decided ? (
         <span className="bg-surface-2 flex flex-col gap-[7px] rounded-[14px] px-3.5 py-3">
-          <span className="text-accent-ink font-mono text-[10.5px] leading-none tracking-[0.14em]">
-            RETENU
-          </span>
-          <span className="text-text text-sm font-semibold leading-[1.45]">
-            {sheet.decision}
-          </span>
+          <span className="text-accent-ink font-mono text-[10.5px] leading-none tracking-[0.14em]">RETENU</span>
+          <span className="text-text text-sm font-semibold leading-[1.45]">{sheet.decision}</span>
         </span>
       ) : (
         <span className="text-[13px] font-medium leading-[1.4] text-muted">

@@ -21,13 +21,7 @@ export function Media({
       className={`relative overflow-hidden bg-[repeating-linear-gradient(135deg,transparent_0_11px,var(--ph-line)_11px_12px),var(--ph-a)] ${className}`}
     >
       {src ? (
-        <img
-          src={src}
-          alt=""
-          loading="lazy"
-          draggable={false}
-          className="absolute inset-0 size-full object-cover"
-        />
+        <img src={src} alt="" loading="lazy" draggable={false} className="absolute inset-0 size-full object-cover" />
       ) : (
         <span className="absolute bottom-3 left-3.5 font-mono text-[10.5px] uppercase leading-none tracking-[0.1em] text-muted">
           {label}
