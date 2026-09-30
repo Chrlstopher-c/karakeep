@@ -5,13 +5,17 @@ mod connection;
 use tauri::Manager;
 use tauri_plugin_log::{Target, TargetKind};
 
-// WebKitGTK sous Wayland : rendu DMA-BUF instable (NVIDIA) et suivi DRM de la fréquence
-// d'écran qui lit 0 Hz au réveil de l'écran (SIGFPE). Réglages par défaut, surchargeables.
+// WebKitGTK : suivi DRM de la fréquence d'écran qui lit 0 Hz au réveil de l'écran (SIGFPE).
+// Rendu DMA-BUF coupé avec NVIDIA seulement (plantage explicit-sync) ; ailleurs, le couper
+// divise la fluidité par 3, donc on le rétablit même si la session l'a coupé pour toutes les apps.
 fn webkit_workarounds() {
-    for (key, value) in [("WEBKIT_DISABLE_DMABUF_RENDERER", "1"), ("WEBKIT_FORCE_VBLANK_TIMER", "1")] {
-        if std::env::var_os(key).is_none() {
-            std::env::set_var(key, value);
-        }
+    if std::env::var_os("WEBKIT_FORCE_VBLANK_TIMER").is_none() {
+        std::env::set_var("WEBKIT_FORCE_VBLANK_TIMER", "1");
+    }
+    if std::path::Path::new("/proc/driver/nvidia").exists() {
+        std::env::set_var("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
+    } else {
+        std::env::remove_var("WEBKIT_DISABLE_DMABUF_RENDERER");
     }
 }
 

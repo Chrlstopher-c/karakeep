@@ -80,3 +80,6 @@ Branche `echo` = nos changements ; `main` suit l'upstream (karakeep-app/karakeep
 - WebKitGTK 2.52 : plantage SIGFPE quand le suivi DRM de la fréquence d'écran lit 0 Hz (veille/réveil d'écran).
   Parade : `WEBKIT_FORCE_VBLANK_TIMER=1`, posé par Savoir au démarrage (`src-tauri/src/lib.rs`) et par ses
   lanceurs. Touche aussi les autres apps WebKit de la machine (variable ajoutée à l'environnement Hyprland).
+- Rendu DMA-BUF de WebKit : Savoir le coupe si NVIDIA est détecté (`/proc/driver/nvidia`) et le rétablit sinon, même
+  si la session le coupe globalement. Sur l'Intel Iris Xe du portable, le couper faisait tomber l'animation
+  d'environ 16 à 4,5 i/s (mesuré), d'où les saccades.
