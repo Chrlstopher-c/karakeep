@@ -24,7 +24,8 @@ Branche `echo` = nos changements ; `main` suit l'upstream (karakeep-app/karakeep
   - `update-bookmark` accepte `text` (corps markdown des notes).
 - Web :
   - Notes markdown : `==surligné==`, `=={green|red|blue|yellow}texte==`, blocs ```mermaid rendus en schémas.
-  - Vue en direct : requêtes bookmarks/highlights/lists/tags rechargées toutes les 4 s (onglet visible).
+  - Vue en direct : requêtes bookmarks/highlights/lists/tags rechargées toutes les 4 s (onglet visible), suspendue
+    pendant un dialogue, un menu ou une saisie (sinon les options se reconstruisent sous le curseur).
 
 - Serveur (tRPC) :
   - Provenance des agents : colonne `apiKey.agent` ; toute mutation faite avec une clé agent est journalisée dans
