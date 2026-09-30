@@ -158,6 +158,9 @@ jobs:
       - name: Frontend tests
         run: pnpm --filter @karakeep/desktop test
 
+      - name: Build bundled MCP server
+        run: pnpm --filter @karakeep/mcp build
+
       - name: Build frontend
         run: pnpm --filter @karakeep/desktop build
 

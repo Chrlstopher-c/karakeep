@@ -9,7 +9,7 @@ Port React fidèle au prototype, écran par écran, CI verte à chaque palier.
 - [x] Accueil (« ce qui a bougé », reprendre la lecture, dernières sources)
 - [x] Sources : grille/liste/compact, filtres Tous/Chris/Claude + types, tri, FLIP
 - [x] Lecteur : article/capture/archive, barre de surlignage 1-4 + note, panneau surlignages/infos, surlignage animé
-- [ ] Décisions : colonnes ouvertes/tranchées/abandonnées + fiche (options, retenir, conséquences, sources liées)
+- [x] Décisions : colonnes ouvertes/tranchées/abandonnées + fiche (options, retenir, conséquences, sources liées)
 - [ ] Surlignages (mur), Projets, Tags, Réglages
 - [ ] Claude : état MCP, écriture de ~/.claude.json, clé Claude, outils, journal d'activité, mode suivi (F)
 - [ ] Palette ⌘K, capture rapide (raccourci global), notifications groupées, hors ligne

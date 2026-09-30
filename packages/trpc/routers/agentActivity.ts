@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { and, desc, eq, gte, inArray, sql } from "drizzle-orm";
+import { and, desc, eq, gte, inArray, isNotNull, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import {
@@ -161,6 +161,24 @@ export const agentActivityAppRouter = router({
         .update(apiKeys)
         .set({ agent: input.agent })
         .where(and(eq(apiKeys.id, input.id), eq(apiKeys.userId, ctx.user.id)));
+      if (res.changes === 0) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+    }),
+
+  revokeAgentKey: authedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      assertFullAccess(ctx);
+      const res = await ctx.db
+        .delete(apiKeys)
+        .where(
+          and(
+            eq(apiKeys.id, input.id),
+            eq(apiKeys.userId, ctx.user.id),
+            isNotNull(apiKeys.agent),
+          ),
+        );
       if (res.changes === 0) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }

@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
 import type { AgentActivity } from "../claude/useAgentActivity";
+import { ClaudeScreen } from "../claude/ClaudeScreen";
 import { DecisionsScreen } from "../decisions/DecisionsScreen";
 import { SheetScreen } from "../decisions/SheetScreen";
 import { HomeScreen } from "../home/HomeScreen";
@@ -16,6 +17,8 @@ export interface ScreenActions {
   activity: AgentActivity;
   onFollow: () => void;
   onCapture: () => void;
+  following: boolean;
+  onToggleFollow: () => void;
 }
 
 // Écrans pas encore portés depuis la maquette.
@@ -34,6 +37,14 @@ function renderScreen(route: Route, actions: ScreenActions): ReactElement {
   switch (route.screen) {
     case "home":
       return <HomeScreen {...actions} />;
+    case "claude":
+      return (
+        <ClaudeScreen
+          activity={actions.activity}
+          following={actions.following}
+          onToggleFollow={actions.onToggleFollow}
+        />
+      );
     case "decisions":
       return <DecisionsScreen />;
     case "sheet":

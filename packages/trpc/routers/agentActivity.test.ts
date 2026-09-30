@@ -61,6 +61,14 @@ describe("Agent activity", () => {
     await expect(
       apiCallers[1].agentActivity.setAgent({ id: created.id, agent: null }),
     ).rejects.toThrow();
+    await owner.agentActivity.revokeAgentKey({ id: created.id });
+    expect((await owner.agentActivity.keys()).map((k) => k.id)).not.toContain(
+      created.id,
+    );
+    const plain = await owner.apiKeys.create({ name: "Plain" });
+    await expect(
+      owner.agentActivity.revokeAgentKey({ id: plain.id }),
+    ).rejects.toThrow();
   });
 });
 

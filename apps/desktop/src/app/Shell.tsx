@@ -76,6 +76,8 @@ export function Shell(): ReactElement {
               activity={activity}
               onFollow={follow.start}
               onCapture={openCapture}
+              following={follow.following}
+              onToggleFollow={follow.toggle}
             />
           </ScrollContext.Provider>
         </div>
